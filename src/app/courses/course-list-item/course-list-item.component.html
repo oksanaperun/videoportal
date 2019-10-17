@@ -1,0 +1,16 @@
+<div class="content">
+  <div class="header">
+    <span class="title">{{title}}</span>
+    <app-button [name]="duration | time"></app-button>
+    <app-button [name]="creationDate | date:'d MMM, yyyy'"></app-button>
+  </div>
+
+  <p>{{description}}</p>
+</div>
+
+<div class="actions">
+  <div class="buttons">
+    <app-button [name]="'Edit'"></app-button>
+    <app-button [name]="'Delete'"></app-button>
+  </div>
+</div>

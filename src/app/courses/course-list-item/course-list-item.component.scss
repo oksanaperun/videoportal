@@ -1,0 +1,27 @@
+:host {
+  display: flex;
+}
+
+.content {
+  flex: 1;
+
+  .header {
+    display: flex;
+
+    .title {
+      flex: 1;
+      font-weight: 700;
+    }
+  }
+}
+
+.actions {
+  width: 285px;
+
+  .buttons {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-left: 88px;
+  }
+}
