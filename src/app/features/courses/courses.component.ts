@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ICourse } from '../models';
+import { ICourse } from 'src/app/core/course';
 // TODO: For debug
-import { courses } from '../fake-data';
+import { courses } from 'src/app/fake-data';
 
 @Component({
   selector: 'app-courses',

@@ -2,43 +2,21 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
+import { CoreModule } from './core/core.module';
+import { SharedModule } from './shared/shared.module';
+import { FeaturesModule } from './features/features.module';
+
 import { AppComponent } from './app.component';
-import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
-import {
-  CoursesComponent,
-  CourseListComponent,
-  CourseListItemComponent,
-  CourseSearchComponent
-} from './courses';
-import { FooterComponent } from './footer/footer.component';
-import { HeaderComponent } from './header/header.component';
-import { NewCourseComponent } from './new-course/new-course.component';
-import { ButtonComponent } from './controls/button/button.component';
-import { LogoComponent } from './logo/logo.component';
-import { InputComponent } from './controls/input/input.component';
-import { TimePipe } from './time.pipe';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    BreadcrumbsComponent,
-    CoursesComponent,
-    CourseListComponent,
-    CourseListItemComponent,
-    CourseSearchComponent,
-    FooterComponent,
-    HeaderComponent,
-    NewCourseComponent,
-    ButtonComponent,
-    LogoComponent,
-    InputComponent,
-    TimePipe,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    CoreModule,
+    SharedModule,
+    FeaturesModule,
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

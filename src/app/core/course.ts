@@ -6,9 +6,3 @@ export interface ICourse {
   description: string;
   authors: string[];
 }
-
-export interface IUser {
-  id: string;
-  firstName: string;
-  lastName: string;
-}
