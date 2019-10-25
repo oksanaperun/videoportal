@@ -1,11 +1,18 @@
 :host {
   display: flex;
+  background-color: #414452;
 }
 
-.column {
-  flex: 50%;
+.left {
+  padding-left: 85px;
 }
 
 .right {
-  float: right;
+  display: flex;
+  margin-left: auto;
+  padding-right: 33px;
+
+  .user-name {
+    margin-right: 13px;
+  }
 }

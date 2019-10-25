@@ -6,7 +6,8 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./input.component.scss']
 })
 export class InputComponent implements OnInit {
-  @Input() icon?: string;
+  @Input() placeholder?: string;
+  @Input() iconPath?: string;
 
   constructor() { }
 

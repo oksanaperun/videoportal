@@ -1,5 +1,8 @@
 :host {
   display: flex;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
 }
 
 .content {
@@ -10,18 +13,47 @@
 
     .title {
       flex: 1;
-      font-weight: 700;
+      font-family: SourceSansPro;
+      font-size: 24px;
+      font-weight: 600;
+      color: #2c2f3c;
     }
+
+    .duration {
+      margin-right: 4px;
+    }
+  }
+
+  .description {
+    font-family: SourceSansPro;
+    font-size: 14px;
+    color: #525462;
   }
 }
 
 .actions {
-  width: 285px;
+  width: 261px;
 
   .buttons {
     display: flex;
     align-items: center;
     height: 100%;
     margin-left: 88px;
+
+    .edit,
+    .delete {
+      height: 24px;
+      background-color: #30b6dd;
+      border-radius: 3px;
+    }
+
+    .edit {
+      width: 75px;
+      margin-right: 12px;
+    }
+
+    .delete {
+      width: 86px;
+    }
   }
 }
