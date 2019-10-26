@@ -4,6 +4,10 @@ button {
     background: transparent;
     border: none;
     color: #ffffff;
+
+    &:focus {
+        outline: 0;
+    }
 }
 
 .icon {

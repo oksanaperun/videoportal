@@ -2,10 +2,12 @@
   class="search-input"
   [placeholder]="'Text to search'"
   [iconPath]="'assets/img/search.png'"
+  (valueChange)="onSearchTextChange($event)"
 ></app-input>
 
 <app-button
   class="search-button"
   [name]="'Search'"
   [fontSize]="'18px'"
+  (click)="onSearchButtonClick()"
 ></app-button>
