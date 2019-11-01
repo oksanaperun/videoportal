@@ -9,8 +9,13 @@
 
 .right {
   display: flex;
+  align-items: center;
   margin-left: auto;
   padding-right: 33px;
+
+  app-button {
+    height: 20px;
+  }
 
   .user-name {
     margin-right: 13px;

@@ -1,24 +1,24 @@
 <div class="content">
   <div class="header">
-    <span class="title">{{title}}</span>
+    <span class="title">{{course?.title}}</span>
 
     <app-button
       class="duration"
-      [name]="duration | time"
+      [name]="course?.duration | time"
       [iconPath]="'assets/img/clock.png'"
       [fontSize]="'12px'"
       [textColor]="'#b9bdce'"
     ></app-button>
 
     <app-button
-      [name]="creationDate | date:'d MMM, yyyy'"
+      [name]="course?.creationDate | date:'d MMM, yyyy'"
       [iconPath]="'assets/img/calendar.png'"
       [fontSize]="'12px'"
       [textColor]="'#b9bdce'"
     ></app-button>
   </div>
 
-  <p class="description">{{description}}</p>
+  <p class="description">{{course?.description}}</p>
 </div>
 
 <div class="actions">

@@ -7,7 +7,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseSearchComponent implements OnInit {
-  searchText = '';
+  private searchText = '';
 
   constructor() { }
 
