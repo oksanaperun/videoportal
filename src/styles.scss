@@ -1,1 +1,55 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: 'SourceSansPro';
+  src: url('./assets/fonts//SourceSansPro.ttf') format('truetype');
+}
+
+body {
+  height: 100vh;
+  margin: 0px;
+  background-color: #f2f3f7;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 875px;
+}
+
+app-header,
+app-breadcrumbs,
+app-footer {
+  height: 64px;
+}
+
+app-courses,
+app-new-course {
+  flex: 1;
+}
+
+.base-font {
+  font-family: SourceSansPro;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f2f3f7;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c4d3;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8c8e9a ;
+}

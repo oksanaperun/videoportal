@@ -1,4 +1,12 @@
+:host {
+  background-color: #414452;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+}
+
 .copyright {
   padding-right: 84px;
   text-align: end;
+  color: #c0c3ce;
 }

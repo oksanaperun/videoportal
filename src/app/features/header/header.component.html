@@ -1,10 +1,17 @@
-<div class="column">
+<div class="left">
   <app-logo></app-logo>
 </div>
 
-<div class="column">
-  <div class="right">
-    <app-button [name]="'User login'"></app-button>
-    <app-button [name]="'Logout'"></app-button>
-  </div>
+<div class="right">
+  <app-button
+    class="user-name"
+    [name]="'User login'"
+    [iconPath]="'assets/img/user.png'"
+  ></app-button>
+
+  <app-button
+    [name]="'Logout'"
+    [iconPath]="'assets/img/exit.png'"
+    (click)="onLogoutClick()"
+  ></app-button>
 </div>

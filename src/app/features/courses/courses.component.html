@@ -1,9 +1,12 @@
 <app-course-search></app-course-search>
 
 <div class="add-button-box">
-  <app-button [name]="'Add'"></app-button>
+  <app-button [name]="'Add course'" [iconPath]="'assets/img/plus.png'"></app-button>
 </div>
 
-<app-course-list [courses]="courses"></app-course-list>
+<app-course-list
+  [courses]="courses"
+  (deleteCourse)="onDeleteCourse($event)"
+></app-course-list>
 
-<div class="load-more">LOAD MORE</div>
+<div class="load-more" (click)="onLoadMoreClick()">LOAD MORE</div>
