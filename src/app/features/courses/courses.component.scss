@@ -24,6 +24,15 @@ app-course-search {
   }
 }
 
+.no-data-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  font-size: 18px;
+  text-align: center;
+}
+
 app-course-list {
   margin: 0 65px 24px 65px;
   padding: 0 20px;

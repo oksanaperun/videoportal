@@ -1,12 +1,21 @@
-<app-course-search></app-course-search>
+<app-course-search
+  (searchTextChange)="onSearchTextChange($event)"
+></app-course-search>
 
 <div class="add-button-box">
   <app-button [name]="'Add course'" [iconPath]="'assets/img/plus.png'"></app-button>
 </div>
 
-<app-course-list
-  [courses]="courses"
-  (deleteCourse)="onDeleteCourse($event)"
-></app-course-list>
+<div *ngIf="displayNoDataMessage; else coursesListContent" class="base-font no-data-message">
+  {{'no data. feel free to add new course' | uppercase}}
+</div>
 
-<div class="load-more" (click)="onLoadMoreClick()">LOAD MORE</div>
+<ng-template #coursesListContent>
+  <app-course-list
+    [courses]="courses"
+    [searchText]="searchText"
+    (deleteCourse)="onDeleteCourse($event)"
+  ></app-course-list>
+
+  <div class="load-more" (click)="onLoadMoreClick()">{{'load more' | uppercase}}</div>
+</ng-template>

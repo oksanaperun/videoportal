@@ -1,6 +1,9 @@
 <div class="content">
   <div class="header">
-    <span class="title">{{course?.title}}</span>
+    <span class="title">
+      {{course?.title | uppercase}}
+      <img *ngIf="course?.topRated" src="assets/img/star.png">
+    </span>
 
     <app-button
       class="duration"

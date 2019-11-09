@@ -9,6 +9,7 @@ import { ICourse } from 'src/app/core/course';
 })
 export class CourseListComponent {
   @Input() courses: ICourse[];
+  @Input() searchText: string;
 
   @Output() deleteCourse = new EventEmitter<string>();
 

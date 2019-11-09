@@ -10,9 +10,18 @@ import { courses } from 'src/app/fake-data';
 })
 export class CoursesComponent implements OnInit {
   courses: ICourse[];
+  searchText: string;
 
   ngOnInit() {
     this.courses = courses;
+  }
+
+  get displayNoDataMessage(): boolean {
+    return this.courses.length === 0;
+  }
+
+  onSearchTextChange(searchText: string) {
+    this.searchText = searchText;
   }
 
   onLoadMoreClick() {

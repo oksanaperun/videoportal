@@ -52,7 +52,7 @@ describe('CourseListItemComponent', () => {
   it('should render title', () => {
     const titleEl = hostFixture.debugElement.query(By.css('.title')).nativeElement;
 
-    expect(titleEl.textContent).toBe(title);
+    expect(titleEl.textContent.trim()).toBe(title.toUpperCase());
   });
 
   it('should render description', () => {

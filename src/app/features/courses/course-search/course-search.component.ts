@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-course-search',
@@ -6,13 +6,10 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./course-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CourseSearchComponent implements OnInit {
+export class CourseSearchComponent {
+  @Output() searchTextChange = new EventEmitter<string>();
+
   private searchText = '';
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
   onSearchTextChange(searchText: string) {
     this.searchText = searchText;
@@ -20,5 +17,6 @@ export class CourseSearchComponent implements OnInit {
 
   onSearchButtonClick() {
     console.log(`Search should be done for the text [${this.searchText}]`);
+    this.searchTextChange.emit(this.searchText);
   }
 }
