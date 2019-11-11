@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { LogoComponent } from './logo.component';
 
@@ -19,7 +20,9 @@ describe('LogoComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render logo icon', () => {
+    const logoEl = fixture.debugElement.query(By.css('img')).nativeElement;
+
+    expect(logoEl.getAttribute('src')).toBe('assets/img/logo.png');
   });
 });

@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { BreadcrumbsComponent } from './breadcrumbs.component';
 
@@ -8,9 +9,9 @@ describe('BreadcrumbsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BreadcrumbsComponent ]
+      declarations: [BreadcrumbsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +20,9 @@ describe('BreadcrumbsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render static text', () => {
+    const staticTextEl = fixture.debugElement.query(By.css('span')).nativeElement;
+
+    expect(staticTextEl.textContent).toBe('Courses');
   });
 });
