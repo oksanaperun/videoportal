@@ -9,24 +9,6 @@ body {
   background-color: #f2f3f7;
 }
 
-app-root {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-width: 875px;
-}
-
-app-header,
-app-breadcrumbs,
-app-footer {
-  height: 64px;
-}
-
-app-courses,
-app-new-course {
-  flex: 1;
-}
-
 .base-font {
   font-family: SourceSansPro;
   font-size: 14px;

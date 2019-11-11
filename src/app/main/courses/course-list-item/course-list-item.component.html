@@ -1,0 +1,51 @@
+<div
+  class="app-course-list-item"
+  [ngClass]="{'top-rated': course.topRated}"
+  [appCreationDateBorder]="course.creationDate">
+
+  <div class="content">
+    <div class="header">
+      <span class="title">
+        {{course?.title | uppercase}}
+        <img *ngIf="course?.topRated" src="assets/img/star.png">
+      </span>
+
+      <app-button
+        class="duration"
+        [name]="course?.duration | timeInMinutes"
+        [iconPath]="'assets/img/clock.png'"
+        [fontSize]="'12px'"
+        [textColor]="'#b9bdce'"
+      ></app-button>
+
+      <app-button
+        [name]="course?.creationDate | date:'d MMM, yyyy'"
+        [iconPath]="'assets/img/calendar.png'"
+        [fontSize]="'12px'"
+        [textColor]="'#b9bdce'"
+      ></app-button>
+    </div>
+
+    <p class="description">{{course?.description}}</p>
+  </div>
+
+  <div class="actions">
+    <div class="buttons">
+      <app-button
+        class="edit"
+        [name]="'Edit'"
+        [iconPath]="'assets/img/pencil.png'"
+        [fontSize]="'12px'"
+        (click)="onEditButtonClick()"
+      ></app-button>
+
+      <app-button
+        class="delete"
+        [name]="'Delete'"
+        [iconPath]="'assets/img/trash.png'"
+        [fontSize]="'12px'"
+        (click)="onDeleteButtonClick()"
+      ></app-button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+:host {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    padding-left: 85px;
+}
+
+.item {
+    color: #2c2f3c;
+
+    &.current {
+        font-weight: 600;
+    }
+}

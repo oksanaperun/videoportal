@@ -1,6 +1,6 @@
-import { ICourse } from './core/course';
+import { Course } from 'src/app/core/entities';
 
-const course1: ICourse = {
+const course1: Course = {
   id: 'id_1',
   title: 'Video Course 1. Name tag',
   creationDate: new Date().setDate(new Date().getDate() - 10),
@@ -14,7 +14,7 @@ const course1: ICourse = {
   topRated: true
 };
 
-const course2: ICourse = {
+const course2: Course = {
   id: 'id_2',
   title: 'Course 2',
   creationDate: 1571050553514,
@@ -23,7 +23,7 @@ const course2: ICourse = {
   authors: ['Mike']
 };
 
-const course3: ICourse = {
+const course3: Course = {
   id: 'id_3',
   title: 'Course 3. Title',
   creationDate: new Date().setDate(new Date().getDate() + 2),
