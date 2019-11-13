@@ -1,19 +1,20 @@
-import { ICourse } from './core/course';
+import { Course } from 'src/app/core/entities';
 
-const course1: ICourse = {
+const course1: Course = {
   id: 'id_1',
   title: 'Video Course 1. Name tag',
-  creationDate: 1570850553514,
+  creationDate: new Date().setDate(new Date().getDate() - 10),
   duration: 135,
   description: `Learn about where you can find course descriptions, what information they include,
     how they work, and details about various components of a course description. Course descriptions
     report information about a university or college's classes. They're published both in course catalogs
     that outline degree requirements and in course schedules that contain descriptions for all courses
     offered during a particular semester.`,
-  authors: ['Jordan', 'Mike']
+  authors: ['Jordan', 'Mike'],
+  topRated: true
 };
 
-const course2: ICourse = {
+const course2: Course = {
   id: 'id_2',
   title: 'Course 2',
   creationDate: 1571050553514,
@@ -22,10 +23,10 @@ const course2: ICourse = {
   authors: ['Mike']
 };
 
-const course3: ICourse = {
+const course3: Course = {
   id: 'id_3',
   title: 'Course 3. Title',
-  creationDate: 1532094906885,
+  creationDate: new Date().setDate(new Date().getDate() + 2),
   duration: 93,
   description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
     ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris

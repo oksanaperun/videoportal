@@ -1,0 +1,65 @@
+.app-course-list-item {
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 24px 0 rgba(18, 21, 35, 0.08);
+
+  &.top-rated {
+    background-color: #fffbe9;
+  }
+}
+
+.content {
+  flex: 1;
+
+  .header {
+    display: flex;
+
+    .title {
+      flex: 1;
+      font-family: SourceSansPro;
+      font-size: 24px;
+      font-weight: 600;
+      color: #2c2f3c;
+    }
+
+    .duration {
+      margin-right: 4px;
+    }
+  }
+
+  .description {
+    font-family: SourceSansPro;
+    font-size: 14px;
+    color: #525462;
+  }
+}
+
+.actions {
+  width: 261px;
+
+  .buttons {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-left: 88px;
+
+    .edit,
+    .delete {
+      height: 24px;
+      background-color: #30b6dd;
+      border-radius: 3px;
+    }
+
+    .edit {
+      width: 75px;
+      margin-right: 12px;
+    }
+
+    .delete {
+      width: 86px;
+    }
+  }
+}

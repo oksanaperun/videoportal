@@ -1,15 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TimePipe } from './pipes/time.pipe';
-
 @NgModule({
-    declarations: [
-        TimePipe,
-    ],
+    declarations: [],
     imports: [CommonModule],
-    exports: [
-        TimePipe,
-    ]
+    exports: []
 })
 export class CoreModule { }
