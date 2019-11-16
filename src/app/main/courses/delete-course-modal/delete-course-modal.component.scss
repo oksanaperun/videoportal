@@ -1,0 +1,20 @@
+.actions {
+  display: flex;
+  justify-content: flex-end;
+
+  app-button {
+    height: 36px;
+    border-radius: 3px;
+  }
+
+  .cancel-button {
+    width: 76px;
+    background-color: #d9dbe3;
+  }
+
+  .confirm-button {
+    width: 99px;
+    background-color: #9bc837;
+    margin-left: 18px;
+  }
+}

@@ -1,6 +1,6 @@
-import { Course } from 'src/app/core/entities';
+import { CourseDto } from './core/api/courses/course-dto';
 
-const course1: Course = {
+const course1: CourseDto = {
   id: 'id_1',
   title: 'Video Course 1. Name tag',
   creationDate: new Date().setDate(new Date().getDate() - 10),
@@ -10,20 +10,20 @@ const course1: Course = {
     report information about a university or college's classes. They're published both in course catalogs
     that outline degree requirements and in course schedules that contain descriptions for all courses
     offered during a particular semester.`,
-  authors: ['Jordan', 'Mike'],
-  topRated: true
+  authors: 'Jordan,Mike',
+  topRated: 'YES'
 };
 
-const course2: Course = {
+const course2: CourseDto = {
   id: 'id_2',
   title: 'Course 2',
   creationDate: 1571050553514,
   duration: 50,
   description: 'JavaScript frameworks overview',
-  authors: ['Mike']
+  authors: 'Mike'
 };
 
-const course3: Course = {
+const course3: CourseDto = {
   id: 'id_3',
   title: 'Course 3. Title',
   creationDate: new Date().setDate(new Date().getDate() + 2),
@@ -33,7 +33,7 @@ const course3: Course = {
     nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
     esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
     culpa qui officia deserunt mollit anim id est laborum.`,
-  authors: ['Jordan']
+  authors: 'Jordan'
 };
 
 export const courses = [course1, course2, course3];

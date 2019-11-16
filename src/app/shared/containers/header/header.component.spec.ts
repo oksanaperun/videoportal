@@ -1,17 +1,37 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
+import { AuthService } from 'src/app/core/auth/auth.service';
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
 
+  let mockRouter;
+  let mockAuthService;
+
+  beforeEach(() => {
+    mockRouter = {
+      navigate: jasmine.createSpy()
+    };
+
+    mockAuthService = {
+      logout: jasmine.createSpy(),
+      isAuthenticated: true
+    };
+  });
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [HeaderComponent]
+      declarations: [HeaderComponent],
+      providers: [
+        { provide: Router, useValue: mockRouter },
+        { provide: AuthService, useValue: mockAuthService }
+      ]
     })
       .compileComponents();
   }));
@@ -46,12 +66,19 @@ describe('HeaderComponent', () => {
     expect(logoutEl.iconPath).toBe('assets/img/exit.png');
   });
 
-  it('should handle logout button click event', () => {
-    const logoutEl = fixture.debugElement.queryAll(By.css('app-button'))[1].nativeElement;
-    const consoleLogSpy = spyOn(console, 'log');
+  describe('on logout button click', () => {
+    beforeEach(() => {
+      const logoutEl = fixture.debugElement.queryAll(By.css('app-button'))[1].nativeElement;
 
-    logoutEl.dispatchEvent(new Event('click'));
+      logoutEl.dispatchEvent(new Event('click'));
+    });
 
-    expect(consoleLogSpy).toHaveBeenCalledWith('Logout is clicked.');
+    it('should logout user', () => {
+      expect(mockAuthService.logout).toHaveBeenCalledWith();
+    });
+
+    it('should navigate user to login', () => {
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['login']);
+    });
   });
 });

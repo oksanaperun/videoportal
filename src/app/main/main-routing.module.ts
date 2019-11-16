@@ -4,7 +4,7 @@ import { MainComponent } from './main.component';
 
 const routes: Routes = [
   {
-    path: 'courses',
+    path: '',
     component: MainComponent,
     children: [
       {
@@ -16,11 +16,6 @@ const routes: Routes = [
         loadChildren: () => import('./new-course/new-course.module').then(mod => mod.NewCourseModule)
       }
     ]
-  },
-  {
-    path: '',
-    redirectTo: '/courses',
-    pathMatch: 'full'
   }
 ];
 

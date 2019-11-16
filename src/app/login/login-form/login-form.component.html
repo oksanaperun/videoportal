@@ -1,0 +1,40 @@
+<div class="header-box">
+  <span class="base-font title">Login</span>
+  <span *ngIf="errorMessage" class="base-font error-message">{{errorMessage}}</span>
+</div>
+
+<div class="user-login-box">
+  <div class="header">
+    <span class="base-font name">E-mail:</span>
+    <span class="base-font required">*required</span>
+  </div>
+
+  <app-input
+    [placeholder]="'Enter e-mail'"
+    (valueChange)="onUserLoginChange($event)"
+  ></app-input>
+</div>
+
+<div class="user-password-box">
+  <div class="header">
+    <span class="base-font name">Password:</span>
+    <span class="base-font required">*required</span>
+  </div>
+
+  <app-input
+    [placeholder]="'Enter password'"
+    (valueChange)="onPasswordChange($event)"
+  ></app-input>
+</div>
+
+<div class="footer-box">
+  <span class="base-font forgot-password">Forgot password?</span>
+
+  <app-button
+    class="login-button"
+    [class.disabled]="!isLoginEnabled"
+    [name]="'Login'"
+    [textColor]="loginButtonColor"
+    (click)="onLoginButtonClick()"
+  ></app-button>
+</div>

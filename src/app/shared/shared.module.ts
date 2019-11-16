@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { FooterComponent } from './containers/footer/footer.component';
+import { HeaderComponent } from './containers/header/header.component';
+
 import { ButtonComponent } from './controls/button/button.component';
 import { InputComponent } from './controls/input/input.component';
 import { LogoComponent } from './controls/logo/logo.component';
@@ -13,6 +16,8 @@ import { OrderByCreationDatePipe } from './pipes/order-by-creation-date.pipe';
 import { TimeInMinutesPipe } from './pipes/time-in-minutes.pipe';
 
 const items = [
+    FooterComponent,
+    HeaderComponent,
     ButtonComponent,
     InputComponent,
     LogoComponent,

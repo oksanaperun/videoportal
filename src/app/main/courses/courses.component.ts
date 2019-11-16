@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+
 import { Course } from 'src/app/core/entities';
-// TODO: For debug
-import { courses } from 'src/app/fake-data';
+import { CoursesService } from 'src/app/core/api/courses/courses.service';
+import { DeleteCourseModalComponent } from './delete-course-modal/delete-course-modal.component';
 
 @Component({
   selector: 'app-courses',
@@ -12,8 +14,13 @@ export class CoursesComponent implements OnInit {
   courses: Course[];
   searchText: string;
 
+  constructor(
+    private dialog: MatDialog,
+    private coursesService: CoursesService,
+  ) { }
+
   ngOnInit() {
-    this.courses = courses;
+    this.loadCourses();
   }
 
   get displayNoDataMessage(): boolean {
@@ -29,6 +36,37 @@ export class CoursesComponent implements OnInit {
   }
 
   onDeleteCourse(courseId: string) {
-    console.log(`Course with id [${courseId}] should be deleted.`);
+    this.openDeleteCourseModal(courseId);
+  }
+
+  private loadCourses() {
+    this.courses = this.coursesService.getList();
+  }
+
+  private openDeleteCourseModal(courseId: string) {
+    const courseToDelete = this.getCourseById(courseId);
+    const dialogConfig = this.getDeleteCourseModalConfig(courseToDelete);
+    const dialogRef = this.dialog.open(DeleteCourseModalComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe((shouldDelete: boolean) => {
+      if (shouldDelete) {
+        this.coursesService.removeItemById(courseId);
+        this.loadCourses();
+      }
+    });
+  }
+
+  private getDeleteCourseModalConfig(courseToDelete: Course): MatDialogConfig {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '394px';
+    dialogConfig.data = { title: courseToDelete.title };
+
+    return dialogConfig;
+  }
+
+  private getCourseById(id: string): Course {
+    return this.courses.find(course => course.id === id);
   }
 }
