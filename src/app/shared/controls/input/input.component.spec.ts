@@ -68,7 +68,7 @@ describe('InputComponent', () => {
     const inputValue = 'some_value';
     const onChangeSpy = spyOn(hostComponent, 'onChange');
 
-    inputEl.setAttribute('value', inputValue);
+    inputEl.value = inputValue;
     inputEl.dispatchEvent(new Event('input'));
 
     expect(onChangeSpy).toHaveBeenCalledWith(inputValue);

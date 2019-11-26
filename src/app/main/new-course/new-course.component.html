@@ -1,1 +1,7 @@
-<p>new-course works!</p>
+<div class="app-new-course">
+  <app-course-form
+    [formTitle]="'New course'"
+    (saveClick)="onSaveClick($event)"
+    (cancelClick)="onCancelClick()"
+  ></app-course-form>
+</div>

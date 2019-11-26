@@ -1,0 +1,12 @@
+input {
+  width: calc(100% - 24px);
+  height: 22px;
+  border-radius: 3px;
+  padding: 6px 12px;
+  border: solid 1px #d9dbe3;
+  color: #2c2f3c;
+
+  &::placeholder {
+    color: #c0c3ce;
+  }
+}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
+import { Router } from '@angular/router';
 
 import { Course } from 'src/app/core/entities';
 import { CoursesService } from 'src/app/core/api/courses/courses.service';
@@ -17,6 +18,7 @@ export class CoursesComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private coursesService: CoursesService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -29,6 +31,10 @@ export class CoursesComponent implements OnInit {
 
   onSearchTextChange(searchText: string) {
     this.searchText = searchText;
+  }
+
+  onAddButtonClick() {
+    this.router.navigate(['courses', 'new']);
   }
 
   onLoadMoreClick() {

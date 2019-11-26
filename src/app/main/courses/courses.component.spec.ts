@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, Component, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { of } from 'rxjs';
@@ -14,6 +15,7 @@ describe('CoursesComponent', () => {
   let fixture: ComponentFixture<CoursesComponent>;
 
   let mockCoursesService;
+  let mockRouter;
   let mockMatDialog;
   let mockMatDialogRef;
   let mockMatDialogConfig;
@@ -47,6 +49,10 @@ describe('CoursesComponent', () => {
       getList: jasmine.createSpy().and.returnValue(courses),
       removeItemById: jasmine.createSpy()
     };
+
+    mockRouter = {
+      navigate: jasmine.createSpy()
+    };
   });
 
   beforeEach(async(() => {
@@ -55,6 +61,7 @@ describe('CoursesComponent', () => {
       declarations: [CoursesComponent, MockCourseListComponent],
       providers: [
         { provide: CoursesService, useValue: mockCoursesService },
+        { provide: Router, useValue: mockRouter },
         { provide: MatDialog, useValue: mockMatDialog },
         { provide: MatDialogConfig, useValue: mockMatDialogConfig },
       ]
@@ -100,6 +107,14 @@ describe('CoursesComponent', () => {
     const addButtonEl = fixture.debugElement.query(By.css('app-button')).nativeElement;
 
     expect(addButtonEl.iconPath).toBe('assets/img/plus.png');
+  });
+
+  it('should navigate to new course after add button click', () => {
+    const addButtonEl = fixture.debugElement.query(By.css('app-button')).nativeElement;
+
+    addButtonEl.dispatchEvent(new Event('click'));
+
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['courses', 'new']);
   });
 
   it('should handle load more click event', () => {

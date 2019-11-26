@@ -1,0 +1,91 @@
+<div class="header-box">
+  <span class="base-font title">{{formTitle}}</span>
+  <span *ngIf="errorMessage" class="base-font error-message">{{errorMessage}}</span>
+</div>
+
+<div class="fields-box">
+  <div class="title-box">
+    <div class="header">
+      <span class="base-font name">Title:</span>
+      <span class="base-font required">*required</span>
+    </div>
+  
+    <app-input
+      [placeholder]="'Add title'"
+      [value]="title"
+      (valueChange)="onTitleChange($event)"
+    ></app-input>
+  </div>
+  
+  <div class="description-box">
+    <div class="header">
+      <span class="base-font name">Description:</span>
+      <span class="base-font required">*required</span>
+    </div>
+  
+    <app-textarea
+      [placeholder]="'Add description'"
+      [value]="descripiton"
+      (valueChange)="onDescriptionChange($event)"
+    ></app-textarea>
+  </div>
+  
+  <div class="duration-box">
+    <div class="header">
+      <span class="base-font name">Duration:</span>
+      <span class="base-font required">*required</span>
+    </div>
+  
+    <div class="duration-content-box">
+      <app-integer-input
+        class="duration-input"
+        [placeholder]="'minutes'"
+        [value]="duration"
+        (valueChange)="onDurationChange($event)"
+      ></app-integer-input>
+    
+      <span class="base-font duration-info">{{duration | timeInMinutes}}</span>
+    </div>
+  </div>
+  
+  <div class="date-box">
+    <div class="header">
+      <span class="base-font name">Date:</span>
+      <span class="base-font required">*required</span>
+    </div>
+  
+    <app-input
+      [placeholder]="'mm/dd/yyyy'"
+      [value]="date | date:'d MMM, yyyy'"
+      (valueChange)="onDateChange($event)"
+    ></app-input>
+  </div>
+  
+  <div class="authors-box">
+    <div class="header">
+      <span class="base-font name">Authors:</span>
+      <span class="base-font required">*required</span>
+    </div>
+  
+    <app-input
+      [placeholder]="'Start typing'"
+      [value]="authors"
+      (valueChange)="onAuthorsChange($event)"
+    ></app-input>
+  </div>
+</div>
+
+<div class="footer-box">
+  <app-button
+    class="cancel-button"
+    [name]="'Cancel'"
+    [textColor]="'#5b616f'"
+    (click)="onCancelButtonClick()"
+  ></app-button>
+
+  <app-button
+    class="save-button"
+    [name]="'Save'"
+    (click)="onSaveButtonClick()"
+  ></app-button>
+</div>  

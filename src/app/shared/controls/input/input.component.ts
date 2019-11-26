@@ -8,12 +8,15 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class InputComponent {
   @Input() placeholder?: string;
   @Input() iconPath?: string;
+  @Input() inputHeight?: string;
+  @Input() value?: string;
   @Output() valueChange = new EventEmitter<string>();
 
   get inputStyles() {
     return {
       width: `calc(100% - ${this.iconPath ? '56' : '24'}px)`,
-      padding: `12px 12px 12px ${this.iconPath ? '42' : '12'}px`,
+      padding: `6px 12px 6px ${this.iconPath ? '42' : '12'}px`,
+      height: this.inputHeight || '22px',
     };
   }
 

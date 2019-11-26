@@ -4,6 +4,7 @@
   <input
     placeholder="{{placeholder}}"
     [ngStyle]="inputStyles"
+    [value]="value || ''"
     (input)="onInput($event)"
   />
 </div>
