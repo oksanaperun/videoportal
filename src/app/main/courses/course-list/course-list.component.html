@@ -1,6 +1,7 @@
 <ng-container *ngFor="let course of courses | orderByCreationDate: 'DESC' | filterByTitle: searchText; trackBy: trackCoursesById">
   <app-course-list-item
     [course]="course"
+    (editCourse)="editCourse.emit($event)"
     (deleteCourse)="deleteCourse.emit($event)"
   ></app-course-list-item>
 </ng-container>

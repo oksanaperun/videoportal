@@ -6,9 +6,19 @@
 }
 
 .item {
-    color: #2c2f3c;
+    color: #868996;
+
+    &:not(.current) {
+        cursor: pointer;
+    }
 
     &.current {
+        margin-left: 4px;
         font-weight: 600;
+        color: #2c2f3c;   
+    }
+
+    .delimiter {
+        color: #30b6dd;
     }
 }

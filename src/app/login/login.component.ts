@@ -29,6 +29,14 @@ export class LoginComponent implements OnInit {
 
   onLogin(data: UserLoginData) {
     this.authService.login(data.userLogin);
-    this.router.navigate(['courses']);
+
+    const redirectUrl = this.authService.redirectUrl;
+
+    if (redirectUrl) {
+      this.authService.redirectUrl = null;
+      this.router.navigateByUrl(redirectUrl);
+    } else {
+      this.router.navigate(['courses']);
+    }
   }
 }

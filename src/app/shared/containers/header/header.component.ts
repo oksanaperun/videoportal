@@ -18,6 +18,10 @@ export class HeaderComponent {
     return this.authService.isAuthenticated;
   }
 
+  onLogoClick() {
+    this.router.navigate(['courses']);
+  }
+
   onLogoutClick() {
     this.authService.logout();
     this.router.navigate(['login']);

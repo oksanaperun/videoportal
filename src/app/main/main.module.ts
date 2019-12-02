@@ -6,11 +6,13 @@ import { MainRoutingModule } from './main-routing.module';
 
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { MainComponent } from './main.component';
+import { EditCourseComponent } from './edit-course/edit-course.component';
 
 @NgModule({
     declarations: [
         BreadcrumbsComponent,
         MainComponent,
+        EditCourseComponent,
     ],
     imports: [
         CommonModule,

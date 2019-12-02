@@ -10,6 +10,7 @@ export class CourseListComponent {
   @Input() courses: Course[];
   @Input() searchText: string;
 
+  @Output() editCourse = new EventEmitter<string>();
   @Output() deleteCourse = new EventEmitter<string>();
 
   trackCoursesById(index: number, course: Course): string {

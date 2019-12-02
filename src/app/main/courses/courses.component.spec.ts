@@ -6,6 +6,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { of } from 'rxjs';
 
 import { CoursesService } from 'src/app/core/api/courses/courses.service';
+import { BreadcrumbsService } from 'src/app/core/breadcrumbs/breadcrumbs.service';
 import { DeleteCourseModalComponent } from './delete-course-modal/delete-course-modal.component';
 
 import { CoursesComponent } from './courses.component';
@@ -15,6 +16,7 @@ describe('CoursesComponent', () => {
   let fixture: ComponentFixture<CoursesComponent>;
 
   let mockCoursesService;
+  let mockBreadcrumbsService;
   let mockRouter;
   let mockMatDialog;
   let mockMatDialogRef;
@@ -50,6 +52,10 @@ describe('CoursesComponent', () => {
       removeItemById: jasmine.createSpy()
     };
 
+    mockBreadcrumbsService = {
+      setMainRoute: jasmine.createSpy()
+    };
+
     mockRouter = {
       navigate: jasmine.createSpy()
     };
@@ -61,6 +67,7 @@ describe('CoursesComponent', () => {
       declarations: [CoursesComponent, MockCourseListComponent],
       providers: [
         { provide: CoursesService, useValue: mockCoursesService },
+        { provide: BreadcrumbsService, useValue: mockBreadcrumbsService },
         { provide: Router, useValue: mockRouter },
         { provide: MatDialog, useValue: mockMatDialog },
         { provide: MatDialogConfig, useValue: mockMatDialogConfig },

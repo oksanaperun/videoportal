@@ -23,11 +23,18 @@ describe('CourseListItemComponent', () => {
   }
 
   @Component({
-    template: '<app-course-list-item [course]="course" (deleteCourse)="onDelete($event)"></app-course-list-item>'
+    template: `
+      <app-course-list-item
+        [course]="course"
+        (deleteCourse)="onDelete($event)"
+        (editCourse)="onEdit($event)"
+      ></app-course-list-item>
+    `
   })
   class HostCourseListItemComponent {
     course: Course;
     onDelete() { }
+    onEdit() { }
   }
 
   beforeEach(async(() => {
@@ -128,12 +135,12 @@ describe('CourseListItemComponent', () => {
       expect(editButtonEl.fontSize).toBe('12px');
     });
 
-    it('should log click event', () => {
-      const consoleLogSpy = spyOn(console, 'log');
+    it('should notify about click event', () => {
+      const onEditSpy = spyOn(hostComponent, 'onEdit');
 
       editButtonEl.dispatchEvent(new Event('click'));
 
-      expect(consoleLogSpy).toHaveBeenCalledWith('Edit button is clicked.');
+      expect(onEditSpy).toHaveBeenCalledWith(id);
     });
   });
 

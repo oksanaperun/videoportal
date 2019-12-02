@@ -15,6 +15,14 @@ const routes: Routes = [
     path: '',
     redirectTo: '/courses',
     pathMatch: 'full'
+  },
+  {
+    path: '404',
+    loadChildren: () => import('./page-not-found/page-not-found.module').then(mod => mod.PageNotFoundModule)
+  },
+  {
+    path: '**',
+    redirectTo: '/404',
   }
 ];
 

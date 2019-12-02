@@ -18,6 +18,7 @@
   <app-course-list
     [courses]="courses"
     [searchText]="searchText"
+    (editCourse)="onEditCourse($event)"
     (deleteCourse)="onDeleteCourse($event)"
   ></app-course-list>
 

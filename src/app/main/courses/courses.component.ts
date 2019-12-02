@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Course } from 'src/app/core/entities';
 import { CoursesService } from 'src/app/core/api/courses/courses.service';
 import { DeleteCourseModalComponent } from './delete-course-modal/delete-course-modal.component';
+import { BreadcrumbsService } from 'src/app/core/breadcrumbs/breadcrumbs.service';
 
 @Component({
   selector: 'app-courses',
@@ -19,9 +20,11 @@ export class CoursesComponent implements OnInit {
     private dialog: MatDialog,
     private coursesService: CoursesService,
     private router: Router,
+    private breadcrumbsService: BreadcrumbsService,
   ) { }
 
   ngOnInit() {
+    this.setBreadcrumbs();
     this.loadCourses();
   }
 
@@ -41,8 +44,19 @@ export class CoursesComponent implements OnInit {
     console.log('Load more is clicked.');
   }
 
+  onEditCourse(courseId: string) {
+    this.router.navigate(['courses', courseId]);
+  }
+
   onDeleteCourse(courseId: string) {
     this.openDeleteCourseModal(courseId);
+  }
+
+  private setBreadcrumbs() {
+    this.breadcrumbsService.setMainRoute({
+      path: ['courses'],
+      title: 'Courses'
+    });
   }
 
   private loadCourses() {

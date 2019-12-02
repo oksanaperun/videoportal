@@ -10,10 +10,11 @@ import { Course } from 'src/app/core/entities';
 export class CourseListItemComponent {
   @Input() course: Course;
 
+  @Output() editCourse = new EventEmitter<string>();
   @Output() deleteCourse = new EventEmitter<string>();
 
   onEditButtonClick() {
-    console.log('Edit button is clicked.');
+    this.editCourse.emit(this.course.id);
   }
 
   onDeleteButtonClick() {
