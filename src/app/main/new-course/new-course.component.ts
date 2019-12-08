@@ -26,8 +26,11 @@ export class NewCourseComponent implements OnInit {
   }
 
   onSaveClick(course: Course) {
-    this.coursesService.createItem(course);
-    this.router.navigate(['courses']);
+    this.coursesService
+      .createItem(course)
+      .subscribe(() => {
+        this.router.navigate(['courses']);
+      });
   }
 
   onCancelClick() {

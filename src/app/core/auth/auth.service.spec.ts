@@ -1,10 +1,22 @@
-import { AuthService } from './auth.service';
+import { TestBed, getTestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+
+import { AuthService, LOGIN_ENDPOINT } from './auth.service';
 
 describe('AuthService', () => {
   let sut: AuthService;
+  let injector: TestBed;
+  let mockHttp: HttpTestingController;
 
   beforeEach(() => {
-    sut = new AuthService();
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [AuthService]
+    });
+
+    injector = getTestBed();
+    sut = injector.get(AuthService);
+    mockHttp = injector.get(HttpTestingController);
   });
 
   it('should return true when user is defined', () => {
@@ -21,22 +33,26 @@ describe('AuthService', () => {
     expect(sut.isAuthenticated).toBe(false);
   });
 
-  it('should return user info', () => {
-    const userLogin = 'some_user';
+  it('should return auth token', () => {
+    const token = 'some_token';
 
     spyOn(localStorage, 'getItem')
-      .and.returnValue(userLogin);
+      .and.returnValue(token);
 
-    expect(sut.getUserInfo()).toBe(userLogin);
+    expect(sut.getAuthToken()).toBe(token);
   });
 
-  it('should store user info on login', () => {
-    const userLogin = 'some_user';
+  it('should store auth token on login', () => {
+    const token = 'some_token';
     const setItemSpy = spyOn(localStorage, 'setItem');
 
-    sut.login(userLogin);
+    sut.login('user', 'password').subscribe(() => {
+      expect(setItemSpy).toHaveBeenCalledWith('authToken', token);
+    });
 
-    expect(setItemSpy).toHaveBeenCalledWith('user', userLogin);
+    const req = mockHttp.expectOne(LOGIN_ENDPOINT);
+    expect(req.request.method).toBe('POST');
+    req.flush({ token });
   });
 
   it('should clear user info on logout', () => {
@@ -44,6 +60,6 @@ describe('AuthService', () => {
 
     sut.logout();
 
-    expect(removeItemSpy).toHaveBeenCalledWith('user');
+    expect(removeItemSpy).toHaveBeenCalledWith('authToken');
   });
 });

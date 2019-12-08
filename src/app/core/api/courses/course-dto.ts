@@ -1,11 +1,13 @@
+import { CourseAuthorDto } from './courseAuthor-dto';
+
 export class CourseDto {
   constructor(
-    public id: string,
-    public title: string,
-    public creationDate: number,
-    public duration: number,
+    public id: number,
+    public name: string,
+    public date: string,
+    public length: number,
     public description: string,
-    public authors: string,
-    public topRated?: string
+    public authors: CourseAuthorDto[],
+    public isTopRated: boolean
   ) { }
 }

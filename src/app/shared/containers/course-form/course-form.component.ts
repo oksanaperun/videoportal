@@ -1,5 +1,12 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { Course } from 'src/app/core/entities';
+import { Course, Author } from 'src/app/core/entities';
+
+// TODO Workaround until dropdown implementation
+const TEST_AUTHOR = {
+  id: 7458,
+  name: 'Deana',
+  lastName: 'Bruce'
+};
 
 @Component({
   selector: 'app-course-form',
@@ -17,7 +24,7 @@ export class CourseFormComponent implements OnChanges {
   descripiton: string;
   duration: number;
   date = Date.now();
-  authors: string;
+  authors: Author[] = [];
   errorMessage: string;
 
   ngOnChanges(changes: SimpleChanges) {
@@ -26,6 +33,11 @@ export class CourseFormComponent implements OnChanges {
     if (course) {
       this.setCourseValues(course);
     }
+  }
+
+  // TODO Workaround until dropdown implementation
+  get authorsString(): string {
+    return this.authors.map(({ name, lastName }) => `${name} ${lastName}`).join(', ');
   }
 
   onTitleChange(value: string) {
@@ -45,17 +57,17 @@ export class CourseFormComponent implements OnChanges {
   }
 
   onAuthorsChange(value: string) {
-    this.authors = value;
+    this.authors = [TEST_AUTHOR];
   }
 
   onSaveButtonClick() {
     this.saveClick.emit(new Course(
-      this.course ? this.course.id : Math.random().toString(36).substr(2, 9),
+      this.course ? this.course.id : null,
       this.title,
       this.date,
       this.duration,
       this.descripiton,
-      this.authors ? this.authors.split(', ') : [],
+      this.authors.length ? this.authors : [TEST_AUTHOR],
       this.course ? this.course.topRated : undefined
     ));
   }
@@ -69,6 +81,6 @@ export class CourseFormComponent implements OnChanges {
     this.descripiton = course.description;
     this.duration = course.duration;
     this.date = course.creationDate;
-    this.authors = course.authors.join(', ');
+    this.authors = course.authors;
   }
 }

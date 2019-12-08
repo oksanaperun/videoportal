@@ -22,5 +22,7 @@
     (deleteCourse)="onDeleteCourse($event)"
   ></app-course-list>
 
-  <div class="load-more" (click)="onLoadMoreClick()">{{'load more' | uppercase}}</div>
+  <div class="load-more-box" *ngIf="showLoadMore">
+    <span (click)="onLoadMoreClick()">{{'load more' | uppercase}}</span>
+  </div>
 </ng-template>

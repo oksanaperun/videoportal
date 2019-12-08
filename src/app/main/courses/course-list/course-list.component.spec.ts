@@ -1,8 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA, Component, Input, Output, EventEmitter, Pipe, PipeTransform } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Component, Input, Output, EventEmitter } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import { SortDirection } from 'src/app/core/entities';
 import { CourseListComponent } from './course-list.component';
 
 describe('CourseListComponent', () => {
@@ -29,20 +28,6 @@ describe('CourseListComponent', () => {
     @Output() deleteCourse = new EventEmitter<string>();
   }
 
-  @Pipe({ name: 'orderByCreationDate' })
-  class MockOrderByCreationDatePipe implements PipeTransform {
-    transform(items: any[], direction: SortDirection): any[] {
-      return direction === 'DESC' ? items : [];
-    }
-  }
-
-  @Pipe({ name: 'filterByTitle' })
-  class MockFilterByTitlePipe implements PipeTransform {
-    transform(items: any[]): any[] {
-      return items;
-    }
-  }
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
@@ -50,8 +35,6 @@ describe('CourseListComponent', () => {
         CourseListComponent,
         HostCourseListComponent,
         MockCourseListItemComponent,
-        MockOrderByCreationDatePipe,
-        MockFilterByTitlePipe,
       ]
     })
       .compileComponents();

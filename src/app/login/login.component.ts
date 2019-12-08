@@ -28,15 +28,19 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin(data: UserLoginData) {
-    this.authService.login(data.userLogin);
+    this.authService
+      .login(data.userLogin, data.password)
+      .subscribe(() => {
+        const redirectUrl = this.authService.redirectUrl;
 
-    const redirectUrl = this.authService.redirectUrl;
-
-    if (redirectUrl) {
-      this.authService.redirectUrl = null;
-      this.router.navigateByUrl(redirectUrl);
-    } else {
-      this.router.navigate(['courses']);
-    }
+        if (redirectUrl) {
+          this.authService.redirectUrl = null;
+          this.router.navigateByUrl(redirectUrl);
+        } else {
+          this.router.navigate(['courses']);
+        }
+      }, (error) => {
+        this.errorMessage = 'User login or password is incorrect';
+      });
   }
 }

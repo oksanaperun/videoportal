@@ -10,6 +10,7 @@ export class InputComponent {
   @Input() iconPath?: string;
   @Input() inputHeight?: string;
   @Input() value?: string;
+  @Input() type?: string;
   @Output() valueChange = new EventEmitter<string>();
 
   get inputStyles() {

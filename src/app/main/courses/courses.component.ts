@@ -7,14 +7,19 @@ import { CoursesService } from 'src/app/core/api/courses/courses.service';
 import { DeleteCourseModalComponent } from './delete-course-modal/delete-course-modal.component';
 import { BreadcrumbsService } from 'src/app/core/breadcrumbs/breadcrumbs.service';
 
+export const COURSES_PER_PAGE = 5;
+
 @Component({
   selector: 'app-courses',
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.scss']
 })
 export class CoursesComponent implements OnInit {
-  courses: Course[];
+  courses: Course[] = [];
   searchText: string;
+  showLoadMore = true;
+
+  private currentPage = 1;
 
   constructor(
     private dialog: MatDialog,
@@ -34,6 +39,9 @@ export class CoursesComponent implements OnInit {
 
   onSearchTextChange(searchText: string) {
     this.searchText = searchText;
+    this.currentPage = 1;
+    this.showLoadMore = true;
+    this.loadCourses();
   }
 
   onAddButtonClick() {
@@ -41,7 +49,8 @@ export class CoursesComponent implements OnInit {
   }
 
   onLoadMoreClick() {
-    console.log('Load more is clicked.');
+    this.currentPage++;
+    this.loadCourses(true);
   }
 
   onEditCourse(courseId: string) {
@@ -59,8 +68,15 @@ export class CoursesComponent implements OnInit {
     });
   }
 
-  private loadCourses() {
-    this.courses = this.coursesService.getList();
+  private loadCourses(isLoadMore?: boolean) {
+    const startIndex = (this.currentPage - 1) * COURSES_PER_PAGE;
+
+    this.coursesService
+      .getList(startIndex, COURSES_PER_PAGE, this.searchText, 'date')
+      .subscribe((courses: Course[]) => {
+        this.courses = isLoadMore ? [...this.courses, ...courses] : courses;
+        this.handleLoadMoreDisplay(courses);
+      });
   }
 
   private openDeleteCourseModal(courseId: string) {
@@ -70,8 +86,11 @@ export class CoursesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((shouldDelete: boolean) => {
       if (shouldDelete) {
-        this.coursesService.removeItemById(courseId);
-        this.loadCourses();
+        this.coursesService
+          .removeItemById(courseId)
+          .subscribe(() => {
+            this.loadCourses();
+          });
       }
     });
   }
@@ -88,5 +107,11 @@ export class CoursesComponent implements OnInit {
 
   private getCourseById(id: string): Course {
     return this.courses.find(course => course.id === id);
+  }
+
+  private handleLoadMoreDisplay(courses: Course[]) {
+    if (courses.length < COURSES_PER_PAGE || !courses.length) {
+      this.showLoadMore = false;
+    }
   }
 }

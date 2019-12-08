@@ -2,8 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { of } from 'rxjs';
 
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { UserService } from 'src/app/core/api/user/user.service';
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
@@ -12,6 +14,7 @@ describe('HeaderComponent', () => {
 
   let mockRouter;
   let mockAuthService;
+  let mockUserService;
 
   beforeEach(() => {
     mockRouter = {
@@ -22,6 +25,10 @@ describe('HeaderComponent', () => {
       logout: jasmine.createSpy(),
       isAuthenticated: true
     };
+
+    mockUserService = {
+      getUserName: () => of('User login')
+    };
   });
 
   beforeEach(async(() => {
@@ -30,7 +37,8 @@ describe('HeaderComponent', () => {
       declarations: [HeaderComponent],
       providers: [
         { provide: Router, useValue: mockRouter },
-        { provide: AuthService, useValue: mockAuthService }
+        { provide: AuthService, useValue: mockAuthService },
+        { provide: UserService, useValue: mockUserService },
       ]
     })
       .compileComponents();

@@ -39,7 +39,7 @@ app-course-list {
   overflow-y: auto;
 }
 
-.load-more {
+.load-more-box {
   font-family: SourceSansPro;
   font-size: 12px;
   height: 48px;
@@ -51,4 +51,8 @@ app-course-list {
   color: #577ce6;
   text-align: center;
   text-decoration: underline;
+
+  span {
+    cursor: pointer;
+  }
 }

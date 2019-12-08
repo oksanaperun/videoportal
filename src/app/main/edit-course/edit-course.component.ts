@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap, switchMap } from 'rxjs/operators';
 
 import { CoursesService } from 'src/app/core/api/courses/courses.service';
 import { Course } from 'src/app/core/entities';
@@ -24,7 +24,7 @@ export class EditCourseComponent implements OnInit {
 
   ngOnInit() {
     this.course$ = this.route.paramMap.pipe(
-      map((params: ParamMap) => this.coursesService.getItemById(params.get('id'))),
+      switchMap((params: ParamMap) => this.coursesService.getItemById(params.get('id'))),
       tap((course: Course) => {
         if (course) {
           this.breadcrumbsService.setChildRoute({
@@ -39,8 +39,11 @@ export class EditCourseComponent implements OnInit {
   }
 
   onSaveClick(course: Course) {
-    this.coursesService.updateItem(course);
-    this.router.navigate(['courses']);
+    this.coursesService
+      .updateItem(course)
+      .subscribe(() => {
+        this.router.navigate(['courses']);
+      });
   }
 
   onCancelClick() {

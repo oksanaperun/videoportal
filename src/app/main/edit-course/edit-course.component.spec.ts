@@ -26,8 +26,8 @@ describe('EditCourseComponent', () => {
     };
 
     mockCoursesService = {
-      getItemById: jasmine.createSpy(),
-      updateItem: jasmine.createSpy(),
+      getItemById: () => of({}),
+      updateItem: () => of(null),
     };
 
     mockBreadcrumbsService = {

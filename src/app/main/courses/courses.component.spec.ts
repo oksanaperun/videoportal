@@ -24,7 +24,10 @@ describe('CoursesComponent', () => {
 
   const courses = [
     { id: 'a', title: 'Title A' },
-    { id: 'b', title: 'Title B' }
+    { id: 'b', title: 'Title B' },
+    { id: 'c', title: 'Title C' },
+    { id: 'd', title: 'Title D' },
+    { id: 'e', title: 'Title E' }
   ];
 
   @Component({
@@ -48,8 +51,8 @@ describe('CoursesComponent', () => {
     mockMatDialogConfig = {};
 
     mockCoursesService = {
-      getList: jasmine.createSpy().and.returnValue(courses),
-      removeItemById: jasmine.createSpy()
+      getList: jasmine.createSpy().and.returnValue(of(courses)),
+      removeItemById: jasmine.createSpy().and.returnValue(of(null))
     };
 
     mockBreadcrumbsService = {
@@ -124,12 +127,12 @@ describe('CoursesComponent', () => {
     expect(mockRouter.navigate).toHaveBeenCalledWith(['courses', 'new']);
   });
 
-  it('should handle load more click event', () => {
-    const loadMoreEl = fixture.debugElement.query(By.css('.load-more')).nativeElement;
-    const consoleLogSpy = spyOn(console, 'log');
+  it('should load courses on load more click event', () => {
+    const loadMoreEl = fixture.debugElement.query(By.css('.load-more-box span')).nativeElement;
 
     loadMoreEl.dispatchEvent(new Event('click'));
 
-    expect(consoleLogSpy).toHaveBeenCalledWith('Load more is clicked.');
+    expect(mockCoursesService.getList.calls.mostRecent().args)
+      .toEqual([5, 5, undefined, 'date']);
   });
 });

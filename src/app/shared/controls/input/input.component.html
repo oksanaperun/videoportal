@@ -5,6 +5,7 @@
     placeholder="{{placeholder}}"
     [ngStyle]="inputStyles"
     [value]="value || ''"
+    [type]="type || 'text'"
     (input)="onInput($event)"
   />
 </div>

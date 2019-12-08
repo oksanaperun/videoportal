@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
+import { of } from 'rxjs';
 
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { LoginComponent } from './login.component';
@@ -18,7 +19,7 @@ describe('LoginComponent', () => {
     };
 
     mockAuthService = {
-      login: jasmine.createSpy(),
+      login: jasmine.createSpy().and.returnValue(of(null)),
       isAuthenticated: true
     };
   });

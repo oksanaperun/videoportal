@@ -3,7 +3,7 @@ import { NO_ERRORS_SCHEMA, Pipe, PipeTransform, Component, DebugElement, EventEm
 import { By } from '@angular/platform-browser';
 
 import { CourseFormComponent } from './course-form.component';
-import { Course } from 'src/app/core/entities';
+import { Course, Author } from 'src/app/core/entities';
 
 describe('CourseFormComponent', () => {
   let component: CourseFormComponent;
@@ -11,13 +11,25 @@ describe('CourseFormComponent', () => {
   let hostComponent: HostCourseFormComponent;
   let hostFixture: ComponentFixture<HostCourseFormComponent>;
 
+  const author1: Author = {
+    id: 7458,
+    name: 'Deana',
+    lastName: 'Bruce'
+  };
+
+  const author2: Author = {
+    id: 7000,
+    name: 'Kelly',
+    lastName: 'Ducan'
+  };
+
   const course = {
     id: 'some_id',
     title: 'some title',
     creationDate: 1571050553514,
     duration: 123,
     description: 'some description',
-    authors: ['John', 'Kelly'],
+    authors: [author1, author2],
   };
 
   @Pipe({ name: 'timeInMinutes' })
@@ -121,7 +133,7 @@ describe('CourseFormComponent', () => {
     });
 
     it('should set authors', () => {
-      expect(component.authors).toBe('John, Kelly');
+      expect(component.authors).toEqual([author1, author2]);
     });
   });
 
@@ -172,14 +184,12 @@ describe('CourseFormComponent', () => {
 
     authorsInputComponent.valueChange.emit(newAuthors);
 
-    expect(component.authors).toBe(newAuthors);
+    expect(component.authors).toEqual([author1]);
   });
 
   it('should notify about save click with new course data', () => {
     const buttonEl = hostFixture.debugElement.query(By.css('.save-button')).nativeElement;
     const saveSpy = spyOn(hostComponent, 'onSave');
-
-    spyOn(Math, 'random').and.returnValue(0.7838644330822031);
 
     component.title = 'new title';
     component.descripiton = 'new description';
@@ -190,12 +200,12 @@ describe('CourseFormComponent', () => {
 
     expect((saveSpy.calls.mostRecent().args as any)[0])
       .toEqual(new Course(
-        's7vz8rr2l',
+        null,
         'new title',
         1571050553514,
         56,
         'new description',
-        [],
+        [author1],
       ));
   });
 
@@ -218,7 +228,7 @@ describe('CourseFormComponent', () => {
         1571050553514,
         56,
         'some description',
-        ['John', 'Kelly'],
+        [author1, author2],
       ));
   });
 

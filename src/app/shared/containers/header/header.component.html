@@ -2,10 +2,10 @@
   <app-logo (click)="onLogoClick()"></app-logo>
 </div>
 
-<div *ngIf="hasUserBox" class="user-box">
+<div *ngIf="userName$ | async as userName" class="user-box">
   <app-button
     class="user-name"
-    [name]="'User login'"
+    [name]="userName"
     [iconPath]="'assets/img/user.png'"
   ></app-button>
 

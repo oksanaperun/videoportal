@@ -1,3 +1,5 @@
+import { Author } from './author';
+
 export class Course {
   constructor(
     public id: string,
@@ -5,7 +7,7 @@ export class Course {
     public creationDate: number,
     public duration: number,
     public description: string,
-    public authors: string[],
+    public authors: Author[],
     public topRated?: boolean
   ) { }
 }

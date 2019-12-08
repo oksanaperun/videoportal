@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
+import { of } from 'rxjs';
 
 import { CoursesService } from 'src/app/core/api/courses/courses.service';
 import { BreadcrumbsService } from 'src/app/core/breadcrumbs/breadcrumbs.service';
@@ -20,7 +21,7 @@ describe('NewCourseComponent', () => {
     };
 
     mockCoursesService = {
-      createItem: jasmine.createSpy()
+      createItem: () => of(null)
     };
 
     mockBreadcrumbsService = {
