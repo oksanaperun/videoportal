@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
@@ -7,9 +7,11 @@ import { of } from 'rxjs';
 
 import { CoursesService } from 'src/app/core/api/courses/courses.service';
 import { BreadcrumbsService } from 'src/app/core/breadcrumbs/breadcrumbs.service';
+import { LoaderStateService } from 'src/app/core/loader-state/loader-state.service';
 import { DeleteCourseModalComponent } from './delete-course-modal/delete-course-modal.component';
 
 import { CoursesComponent } from './courses.component';
+import { SearchComponent } from 'src/app/shared/controls/search/search.component';
 
 describe('CoursesComponent', () => {
   let component: CoursesComponent;
@@ -17,6 +19,7 @@ describe('CoursesComponent', () => {
 
   let mockCoursesService;
   let mockBreadcrumbsService;
+  let mockLoaderStateService;
   let mockRouter;
   let mockMatDialog;
   let mockMatDialogRef;
@@ -39,6 +42,17 @@ describe('CoursesComponent', () => {
     @Output() deleteCourse = new EventEmitter<string>();
   }
 
+  @Component({
+    selector: 'app-search',
+    template: '',
+    providers: [{ provide: SearchComponent, useClass: MockSearchComponent }]
+  })
+  class MockSearchComponent {
+    getSearchTextChange() {
+      return of('');
+    }
+  }
+
   beforeEach(() => {
     mockMatDialogRef = {
       afterClosed: () => of(false)
@@ -59,6 +73,11 @@ describe('CoursesComponent', () => {
       setMainRoute: jasmine.createSpy()
     };
 
+    mockLoaderStateService = {
+      showLoader: jasmine.createSpy(),
+      hideLoader: jasmine.createSpy(),
+    };
+
     mockRouter = {
       navigate: jasmine.createSpy()
     };
@@ -67,10 +86,15 @@ describe('CoursesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [CoursesComponent, MockCourseListComponent],
+      declarations: [
+        CoursesComponent,
+        MockCourseListComponent,
+        MockSearchComponent,
+      ],
       providers: [
         { provide: CoursesService, useValue: mockCoursesService },
         { provide: BreadcrumbsService, useValue: mockBreadcrumbsService },
+        { provide: LoaderStateService, useValue: mockLoaderStateService },
         { provide: Router, useValue: mockRouter },
         { provide: MatDialog, useValue: mockMatDialog },
         { provide: MatDialogConfig, useValue: mockMatDialogConfig },

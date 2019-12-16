@@ -1,11 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { Router } from '@angular/router';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { distinctUntilChanged, filter, map, switchMap, tap, throttleTime } from 'rxjs/operators';
 
 import { Course } from 'src/app/core/entities';
 import { CoursesService } from 'src/app/core/api/courses/courses.service';
 import { DeleteCourseModalComponent } from './delete-course-modal/delete-course-modal.component';
 import { BreadcrumbsService } from 'src/app/core/breadcrumbs/breadcrumbs.service';
+import { SearchComponent } from 'src/app/shared/controls/search/search.component';
+import { LoaderStateService } from 'src/app/core/loader-state/loader-state.service';
 
 export const COURSES_PER_PAGE = 5;
 
@@ -14,34 +18,34 @@ export const COURSES_PER_PAGE = 5;
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.scss']
 })
-export class CoursesComponent implements OnInit {
-  courses: Course[] = [];
-  searchText: string;
-  showLoadMore = true;
+export class CoursesComponent implements AfterViewInit, OnDestroy {
+  @ViewChild(SearchComponent, { static: false }) searchComponent: SearchComponent;
 
-  private currentPage = 1;
+  courses$: Observable<Course[]>;
+  showLoadMore = true;
+  noDataMessage: string;
+
+  private searchText$: Observable<string>;
+  private currentPageSubject = new BehaviorSubject(1);
+  private currentPage$ = this.currentPageSubject.asObservable();
+  private cache: Course[];
 
   constructor(
     private dialog: MatDialog,
     private coursesService: CoursesService,
     private router: Router,
     private breadcrumbsService: BreadcrumbsService,
+    private loaderStateService: LoaderStateService,
   ) { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.setBreadcrumbs();
-    this.loadCourses();
+    this.setSearchText();
+    this.setCourses();
   }
 
-  get displayNoDataMessage(): boolean {
-    return this.courses.length === 0;
-  }
-
-  onSearchTextChange(searchText: string) {
-    this.searchText = searchText;
-    this.currentPage = 1;
-    this.showLoadMore = true;
-    this.loadCourses();
+  ngOnDestroy() {
+    this.currentPageSubject.complete();
   }
 
   onAddButtonClick() {
@@ -49,8 +53,7 @@ export class CoursesComponent implements OnInit {
   }
 
   onLoadMoreClick() {
-    this.currentPage++;
-    this.loadCourses(true);
+    this.currentPageSubject.next(this.currentPageSubject.getValue() + 1);
   }
 
   onEditCourse(courseId: string) {
@@ -68,15 +71,41 @@ export class CoursesComponent implements OnInit {
     });
   }
 
-  private loadCourses(isLoadMore?: boolean) {
-    const startIndex = (this.currentPage - 1) * COURSES_PER_PAGE;
+  private setSearchText() {
+    this.searchText$ = this.searchComponent.getSearchTextChange()
+      .pipe(
+        filter((text: string) => !text || text.length > 2),
+        distinctUntilChanged(),
+        throttleTime(200),
+      );
+  }
 
-    this.coursesService
-      .getList(startIndex, COURSES_PER_PAGE, this.searchText, 'date')
-      .subscribe((courses: Course[]) => {
-        this.courses = isLoadMore ? [...this.courses, ...courses] : courses;
-        this.handleLoadMoreDisplay(courses);
-      });
+  private setCourses() {
+    this.courses$ = combineLatest(
+      this.currentPage$,
+      this.searchText$,
+    ).pipe(
+      tap(() => { this.loaderStateService.showLoader(); }),
+      switchMap(([currentPage, searchText]) => this.getCourses(currentPage, searchText)),
+      map(() => this.cache),
+      tap(() => { this.loaderStateService.hideLoader(); })
+    );
+  }
+
+  private getCourses(currentPage: number, searchText: string): Observable<Course[]> {
+    const startIndex = (currentPage - 1) * COURSES_PER_PAGE;
+
+    return this.coursesService.getList(startIndex, COURSES_PER_PAGE, searchText, 'date')
+      .pipe(
+        tap((courses) => {
+          currentPage > 1
+            ? this.cache = [...this.cache, ...courses]
+            : this.cache = courses;
+
+          this.setNoDataMessage(searchText);
+          this.handleLoadMoreDisplay(courses);
+        }),
+      );
   }
 
   private openDeleteCourseModal(courseId: string) {
@@ -89,7 +118,7 @@ export class CoursesComponent implements OnInit {
         this.coursesService
           .removeItemById(courseId)
           .subscribe(() => {
-            this.loadCourses();
+            this.currentPageSubject.next(1);
           });
       }
     });
@@ -106,7 +135,13 @@ export class CoursesComponent implements OnInit {
   }
 
   private getCourseById(id: string): Course {
-    return this.courses.find(course => course.id === id);
+    return this.cache.find(course => course.id === id);
+  }
+
+  private setNoDataMessage(searchText: string) {
+    this.noDataMessage = !this.cache.length
+      ? (searchText ? 'no courses found' : 'no data. feel free to add new course')
+      : '';
   }
 
   private handleLoadMoreDisplay(courses: Course[]) {

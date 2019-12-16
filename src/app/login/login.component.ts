@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { UserLoginData } from 'src/app/core/entities/userLoginData';
+import { LoaderStateService } from 'src/app/core/loader-state/loader-state.service';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private loaderStateService: LoaderStateService,
   ) { }
 
   ngOnInit() {
@@ -28,9 +30,13 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin(data: UserLoginData) {
+    this.loaderStateService.showLoader();
+
     this.authService
       .login(data.userLogin, data.password)
       .subscribe(() => {
+        this.loaderStateService.hideLoader();
+
         const redirectUrl = this.authService.redirectUrl;
 
         if (redirectUrl) {
@@ -41,6 +47,7 @@ export class LoginComponent implements OnInit {
         }
       }, (error) => {
         this.errorMessage = 'User login or password is incorrect';
+        this.loaderStateService.hideLoader();
       });
   }
 }

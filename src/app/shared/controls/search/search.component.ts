@@ -1,21 +1,23 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent {
-  @Output() searchTextChange = new EventEmitter<string>();
+export class SearchComponent implements OnDestroy {
+  private searchTextSubject = new BehaviorSubject('');
 
-  private searchText = '';
-
-  onSearchTextChange(searchText: string) {
-    this.searchText = searchText;
+  ngOnDestroy() {
+    this.searchTextSubject.complete();
   }
 
-  onSearchButtonClick() {
-    console.log(`Search should be done for the text [${this.searchText}]`);
-    this.searchTextChange.emit(this.searchText);
+  getSearchTextChange(): Observable<string> {
+    return this.searchTextSubject.asObservable();
+  }
+
+  onSearchTextChange(searchText: string) {
+    this.searchTextSubject.next(searchText);
   }
 }

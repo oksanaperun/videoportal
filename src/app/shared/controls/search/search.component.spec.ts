@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, Component, Input, Output, EventEmitter } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { skip, take } from 'rxjs/operators';
 
 import { SearchComponent } from './search.component';
 
@@ -46,28 +47,17 @@ describe('SearchComponent', () => {
     expect(inputComponent.iconPath).toBe('assets/img/search.png');
   });
 
-  it('should set search button name', () => {
-    const buttonEl = fixture.debugElement.query(By.css('app-button')).nativeElement;
-
-    expect(buttonEl.name).toBe('Search');
-  });
-
-  it('should set search button font size', () => {
-    const buttonEl = fixture.debugElement.query(By.css('app-button')).nativeElement;
-
-    expect(buttonEl.fontSize).toBe('18px');
-  });
-
-  it('should log search text on search button click', () => {
+  it('should emit search text change', () => {
     const inputDebugEl = fixture.debugElement.query(By.directive(MockInputComponent));
     const inputComponent = inputDebugEl.componentInstance;
-    const buttonEl = fixture.debugElement.query(By.css('app-button')).nativeElement;
     const searchText = 'some_text';
-    const consoleLogSpy = spyOn(console, 'log');
+
+    component.getSearchTextChange()
+      .pipe(skip(1), take(1))
+      .subscribe((result) => {
+        expect(result).toBe(searchText);
+      });
 
     inputComponent.valueChange.emit(searchText);
-    buttonEl.dispatchEvent(new Event('click'));
-
-    expect(consoleLogSpy).toHaveBeenCalledWith(`Search should be done for the text [${searchText}]`);
   });
 });

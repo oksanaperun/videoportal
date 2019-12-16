@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { of } from 'rxjs';
 
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { LoaderStateService } from 'src/app/core/loader-state/loader-state.service';
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
@@ -12,6 +13,7 @@ describe('LoginComponent', () => {
 
   let mockRouter;
   let mockAuthService;
+  let mockLoaderStateService;
 
   beforeEach(() => {
     mockRouter = {
@@ -22,6 +24,11 @@ describe('LoginComponent', () => {
       login: jasmine.createSpy().and.returnValue(of(null)),
       isAuthenticated: true
     };
+
+    mockLoaderStateService = {
+      showLoader: jasmine.createSpy(),
+      hideLoader: jasmine.createSpy(),
+    };
   });
 
   beforeEach(async(() => {
@@ -30,7 +37,8 @@ describe('LoginComponent', () => {
       declarations: [LoginComponent],
       providers: [
         { provide: Router, useValue: mockRouter },
-        { provide: AuthService, useValue: mockAuthService }
+        { provide: AuthService, useValue: mockAuthService },
+        { provide: LoaderStateService, useValue: mockLoaderStateService },
       ]
     })
       .compileComponents();

@@ -1,6 +1,4 @@
-<app-search
-  (searchTextChange)="onSearchTextChange($event)"
-></app-search>
+<app-search></app-search>
 
 <div class="add-button-box">
   <app-button
@@ -10,11 +8,11 @@
   ></app-button>
 </div>
 
-<div *ngIf="displayNoDataMessage; else coursesListContent" class="base-font no-data-message">
-  {{'no data. feel free to add new course' | uppercase}}
+<div *ngIf="noDataMessage" class="base-font no-data-message">
+  {{noDataMessage | uppercase}}
 </div>
 
-<ng-template #coursesListContent>
+<ng-container *ngIf="courses$ | async as courses">
   <app-course-list
     [courses]="courses"
     [searchText]="searchText"
@@ -25,4 +23,4 @@
   <div class="load-more-box" *ngIf="showLoadMore">
     <span (click)="onLoadMoreClick()">{{'load more' | uppercase}}</span>
   </div>
-</ng-template>
+</ng-container>
