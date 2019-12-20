@@ -1,9 +1,0 @@
-<div class="app-edit-course">
-  <app-course-form
-    *ngIf="course$ | async as course"
-    [formTitle]="'Edit course'"
-    [course]="course"
-    (saveClick)="onSaveClick($event)"
-    (cancelClick)="onCancelClick()"
-  ></app-course-form>
-</div>

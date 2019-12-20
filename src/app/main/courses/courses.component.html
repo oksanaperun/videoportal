@@ -16,8 +16,7 @@
   <app-course-list
     [courses]="courses"
     [searchText]="searchText"
-    (editCourse)="onEditCourse($event)"
-    (deleteCourse)="onDeleteCourse($event)"
+    (doRefresh)="onDoRefresh($event)"
   ></app-course-list>
 
   <div class="load-more-box" *ngIf="showLoadMore">

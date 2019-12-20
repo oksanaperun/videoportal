@@ -2,9 +2,12 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.9.
 
+## Installation
+Run `npm run install:all` to install the dependencies.
+
 ## Development server
 
-Run `npm start` for a dev server (it will run front-end and back-end parts of the application). Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `npm start` for a dev server (it will run front-end and back-end parts of the application). Navigate to `http://localhost:4200/`. Use credentials `Morales` / `id` for login. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 

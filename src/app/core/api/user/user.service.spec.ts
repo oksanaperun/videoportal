@@ -1,8 +1,8 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { AuthService, USER_ENDPOINT } from '../../auth/auth.service';
-import { UserDto } from './user-dto';
+import { AuthService } from '../../services/auth.service';
+import { UserDto } from './dtos/user.dto';
 import { UserService } from './user.service';
 
 describe('UserService', () => {
@@ -49,7 +49,7 @@ describe('UserService', () => {
       expect(userName).toBe('John Lucas');
     });
 
-    const req = mockHttp.expectOne(USER_ENDPOINT);
+    const req = mockHttp.expectOne('auth/userinfo');
     expect(req.request.method).toBe('POST');
     req.flush(userDto);
   });

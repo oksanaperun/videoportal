@@ -7,6 +7,8 @@ import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 
+import { LoginGuard } from '../core/guards/login.guard';
+import { LoginService } from '../core/services/login.service';
 
 @NgModule({
     declarations: [
@@ -17,6 +19,10 @@ import { LoginFormComponent } from './login-form/login-form.component';
         CommonModule,
         SharedModule,
         LoginRoutingModule,
+    ],
+    providers: [
+        LoginGuard,
+        LoginService,
     ]
 })
 export class LoginModule { }

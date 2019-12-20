@@ -1,14 +1,11 @@
-import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
-import { MatDialog, MatDialogConfig } from '@angular/material';
 import { of } from 'rxjs';
 
-import { CoursesService } from 'src/app/core/api/courses/courses.service';
-import { BreadcrumbsService } from 'src/app/core/breadcrumbs/breadcrumbs.service';
-import { LoaderStateService } from 'src/app/core/loader-state/loader-state.service';
-import { DeleteCourseModalComponent } from './delete-course-modal/delete-course-modal.component';
+import { CourseService } from 'src/app/core/api/courses/course.service';
+import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs.service';
 
 import { CoursesComponent } from './courses.component';
 import { SearchComponent } from 'src/app/shared/controls/search/search.component';
@@ -17,13 +14,9 @@ describe('CoursesComponent', () => {
   let component: CoursesComponent;
   let fixture: ComponentFixture<CoursesComponent>;
 
-  let mockCoursesService;
+  let mockCourseService;
   let mockBreadcrumbsService;
-  let mockLoaderStateService;
   let mockRouter;
-  let mockMatDialog;
-  let mockMatDialogRef;
-  let mockMatDialogConfig;
 
   const courses = [
     { id: 'a', title: 'Title A' },
@@ -54,28 +47,13 @@ describe('CoursesComponent', () => {
   }
 
   beforeEach(() => {
-    mockMatDialogRef = {
-      afterClosed: () => of(false)
-    };
-
-    mockMatDialog = {
-      open: jasmine.createSpy().and.returnValue(mockMatDialogRef),
-    };
-
-    mockMatDialogConfig = {};
-
-    mockCoursesService = {
+    mockCourseService = {
       getList: jasmine.createSpy().and.returnValue(of(courses)),
       removeItemById: jasmine.createSpy().and.returnValue(of(null))
     };
 
     mockBreadcrumbsService = {
       setMainRoute: jasmine.createSpy()
-    };
-
-    mockLoaderStateService = {
-      showLoader: jasmine.createSpy(),
-      hideLoader: jasmine.createSpy(),
     };
 
     mockRouter = {
@@ -92,12 +70,9 @@ describe('CoursesComponent', () => {
         MockSearchComponent,
       ],
       providers: [
-        { provide: CoursesService, useValue: mockCoursesService },
+        { provide: CourseService, useValue: mockCourseService },
         { provide: BreadcrumbsService, useValue: mockBreadcrumbsService },
-        { provide: LoaderStateService, useValue: mockLoaderStateService },
         { provide: Router, useValue: mockRouter },
-        { provide: MatDialog, useValue: mockMatDialog },
-        { provide: MatDialogConfig, useValue: mockMatDialogConfig },
       ]
     })
       .compileComponents();
@@ -114,21 +89,6 @@ describe('CoursesComponent', () => {
     const courseListComponent = courseListDebugEl.componentInstance;
 
     expect(courseListComponent.courses).toEqual(courses);
-  });
-
-  it('should open modal on delete course event', () => {
-    const courseListDebugEl = fixture.debugElement.query(By.directive(MockCourseListComponent));
-    const courseListComponent = courseListDebugEl.componentInstance;
-    const dialogConfig = {
-      disableClose: true,
-      width: '394px',
-      data: { title: 'Title B' }
-    };
-
-    courseListComponent.deleteCourse.emit('b');
-
-    expect(mockMatDialog.open)
-      .toHaveBeenCalledWith(DeleteCourseModalComponent, jasmine.objectContaining(dialogConfig));
   });
 
   it('should set add button name', () => {
@@ -156,7 +116,7 @@ describe('CoursesComponent', () => {
 
     loadMoreEl.dispatchEvent(new Event('click'));
 
-    expect(mockCoursesService.getList.calls.mostRecent().args)
+    expect(mockCourseService.getList.calls.mostRecent().args)
       .toEqual([5, 5, undefined, 'date']);
   });
 });

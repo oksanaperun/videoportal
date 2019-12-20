@@ -10,8 +10,7 @@ export class CourseListComponent {
   @Input() courses: Course[];
   @Input() searchText: string;
 
-  @Output() editCourse = new EventEmitter<string>();
-  @Output() deleteCourse = new EventEmitter<string>();
+  @Output() doRefresh = new EventEmitter<null>();
 
   trackCoursesById(index: number, course: Course): string {
     return course.id;

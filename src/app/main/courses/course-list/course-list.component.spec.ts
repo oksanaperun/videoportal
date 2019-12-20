@@ -12,11 +12,11 @@ describe('CourseListComponent', () => {
   const course2 = { a: 456 };
 
   @Component({
-    template: '<app-course-list [courses]="courses" (deleteCourse)="onDelete($event)"></app-course-list>'
+    template: '<app-course-list [courses]="courses" (doRefresh)="onDoRefresh($event)"></app-course-list>'
   })
   class HostCourseListComponent {
     courses: any[];
-    onDelete() { }
+    onDoRefresh() { }
   }
 
   @Component({
@@ -25,7 +25,7 @@ describe('CourseListComponent', () => {
   })
   class MockCourseListItemComponent {
     @Input() course: any;
-    @Output() deleteCourse = new EventEmitter<string>();
+    @Output() doRefresh = new EventEmitter<null>();
   }
 
   beforeEach(async(() => {
@@ -60,14 +60,13 @@ describe('CourseListComponent', () => {
     expect(courseComponent.course).toEqual(course1);
   });
 
-  it('should handle delete course event', () => {
+  it('should handle do refresh event', () => {
     const courseDebugEl = hostFixture.debugElement.query(By.directive(MockCourseListItemComponent));
     const courseComponent = courseDebugEl.componentInstance;
-    const courseId = 'some_id';
-    const onDeleteSpy = spyOn(hostComponent, 'onDelete');
+    const onDoRefreshSpy = spyOn(hostComponent, 'onDoRefresh');
 
-    courseComponent.deleteCourse.emit(courseId);
+    courseComponent.doRefresh.emit();
 
-    expect(onDeleteSpy).toHaveBeenCalledWith(courseId);
+    expect(onDoRefreshSpy).toHaveBeenCalledWith(undefined);
   });
 });

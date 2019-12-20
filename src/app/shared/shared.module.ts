@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { MAT_PROGRESS_SPINNER_DEFAULT_OPTIONS } from '@angular/material';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { CourseFormComponent } from './containers/course-form/course-form.component';
-import { FooterComponent } from './containers/footer/footer.component';
-import { HeaderComponent } from './containers/header/header.component';
-import { LoaderComponent } from './containers/loader/loader.component';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
+import { LoaderComponent } from './components/loader/loader.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 import { ButtonComponent } from './controls/button/button.component';
 import { InputComponent } from './controls/input/input.component';
@@ -21,13 +22,12 @@ import { FilterByTitlePipe } from './pipes/filter-by-title.pipe';
 import { OrderByCreationDatePipe } from './pipes/order-by-creation-date.pipe';
 import { TimeInMinutesPipe } from './pipes/time-in-minutes.pipe';
 
-
-
 const items = [
-    CourseFormComponent,
+    BreadcrumbsComponent,
     FooterComponent,
     HeaderComponent,
     LoaderComponent,
+    PageNotFoundComponent,
     ButtonComponent,
     InputComponent,
     IntegerInputComponent,

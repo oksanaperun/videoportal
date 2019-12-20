@@ -1,7 +1,6 @@
 <ng-container *ngFor="let course of courses; trackBy: trackCoursesById">
   <app-course-list-item
     [course]="course"
-    (editCourse)="editCourse.emit($event)"
-    (deleteCourse)="deleteCourse.emit($event)"
+    (doRefresh)="doRefresh.emit($event)"
   ></app-course-list-item>
 </ng-container>

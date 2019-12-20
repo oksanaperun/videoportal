@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { UserLoginData } from 'src/app/core/entities/userLoginData';
+import { Component } from '@angular/core';
+import { LoginService } from 'src/app/core/services/login.service';
 
 @Component({
   selector: 'app-login-form',
@@ -7,12 +7,12 @@ import { UserLoginData } from 'src/app/core/entities/userLoginData';
   styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent {
-  @Input() errorMessage: string;
-
-  @Output() login = new EventEmitter<UserLoginData>();
+  errorMessage: string;
 
   private userLogin: string;
   private password: string;
+
+  constructor(private loginService: LoginService) { }
 
   get isLoginEnabled(): boolean {
     return !!this.userLogin && !!this.password;
@@ -32,9 +32,14 @@ export class LoginFormComponent {
 
   onLoginButtonClick() {
     if (this.isLoginEnabled) {
-      this.login.emit({
+      const userData = {
         userLogin: this.userLogin,
         password: this.password,
+      };
+
+      this.loginService.login(userData).subscribe(() => {
+      }, () => {
+        this.errorMessage = 'User login or password is incorrect';
       });
     }
   }

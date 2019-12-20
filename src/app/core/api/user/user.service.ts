@@ -3,12 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { AuthService, USER_ENDPOINT } from '../../auth/auth.service';
-import { UserDto } from './user-dto';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { UserDto } from './dtos/user.dto';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class UserService {
 
   constructor(
@@ -23,9 +21,9 @@ export class UserService {
         token
       };
 
-      return this.http
-        .post(USER_ENDPOINT, payload)
-        .pipe(map(this.transformUserResponse));
+      return this.http.post<UserDto>('auth/userinfo', payload).pipe(
+        map((userDto: UserDto) => this.transformUserResponse(userDto))
+      );
     }
   }
 

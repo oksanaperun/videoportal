@@ -6,6 +6,7 @@
     "start": "concurrently \"npm run start:be\" \"npm run start:fe\"",
     "start:fe": "ng serve",
     "start:be": "cd be && npm start",
+    "install:all": "npm install && cd be && npm install",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
