@@ -5,7 +5,7 @@ export class User {
     public lastName: string,
   ) { }
 
-  get userName(): string {
+  getUserName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
 }

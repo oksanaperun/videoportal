@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Course } from 'src/app/core/entities';
 
 @Component({
@@ -9,8 +9,6 @@ import { Course } from 'src/app/core/entities';
 export class CourseListComponent {
   @Input() courses: Course[];
   @Input() searchText: string;
-
-  @Output() doRefresh = new EventEmitter<null>();
 
   trackCoursesById(index: number, course: Course): string {
     return course.id;

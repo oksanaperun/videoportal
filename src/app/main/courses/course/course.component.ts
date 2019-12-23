@@ -2,10 +2,13 @@ import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, iif, of } from 'rxjs';
 import { tap, map, mergeMap } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 
+import { AppState } from 'src/app/core/store/models/app-state';
 import { CourseService } from 'src/app/core/api/courses/course.service';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs.service';
 import { Course, Author } from 'src/app/core/entities';
+import { AddCourseAction, EditCourseAction } from 'src/app/core/store/actions/courses.actions';
 
 // TODO Workaround until dropdown implementation
 const TEST_AUTHOR = {
@@ -35,6 +38,7 @@ export class CourseComponent implements OnInit, OnChanges {
     private route: ActivatedRoute,
     private coursesService: CourseService,
     private breadcrumbsService: BreadcrumbsService,
+    private store: Store<AppState>,
   ) { }
 
   ngOnInit() {
@@ -55,7 +59,7 @@ export class CourseComponent implements OnInit, OnChanges {
   }
 
   // TODO Workaround until dropdown implementation
-  get authorsString(): string {
+  getAuthorsString(): string {
     return this.authors.map(({ name, lastName }) => `${name} ${lastName}`).join(', ');
   }
 
@@ -139,14 +143,10 @@ export class CourseComponent implements OnInit, OnChanges {
   }
 
   private createCourse(course: Course) {
-    this.coursesService.create(course).pipe(
-      tap(() => { this.router.navigate(['courses']); })
-    ).subscribe();
+    this.store.dispatch(new AddCourseAction(course));
   }
 
   private updateCourse(course: Course) {
-    this.coursesService.update(course).pipe(
-      tap(() => { this.router.navigate(['courses']); })
-    ).subscribe();
+    this.store.dispatch(new EditCourseAction(course));
   }
 }

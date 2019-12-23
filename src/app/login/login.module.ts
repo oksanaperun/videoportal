@@ -8,7 +8,6 @@ import { LoginComponent } from './login.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 
 import { LoginGuard } from '../core/guards/login.guard';
-import { LoginService } from '../core/services/login.service';
 
 @NgModule({
     declarations: [
@@ -22,7 +21,6 @@ import { LoginService } from '../core/services/login.service';
     ],
     providers: [
         LoginGuard,
-        LoginService,
     ]
 })
 export class LoginModule { }

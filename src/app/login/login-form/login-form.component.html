@@ -1,6 +1,6 @@
 <div class="header-box">
   <span class="base-font title">Login</span>
-  <span *ngIf="errorMessage" class="base-font error-message">{{errorMessage}}</span>
+  <span *ngIf="errorMessage$ | async as errorMessage" class="base-font error-message">{{errorMessage}}</span>
 </div>
 
 <div class="user-login-box">
@@ -33,9 +33,9 @@
 
   <app-button
     class="login-button"
-    [class.disabled]="!isLoginEnabled"
+    [class.disabled]="!isLoginEnabled()"
     [name]="'Login'"
-    [textColor]="loginButtonColor"
+    [textColor]="getLoginButtonColor()"
     (click)="onLoginButtonClick()"
   ></app-button>
 </div>

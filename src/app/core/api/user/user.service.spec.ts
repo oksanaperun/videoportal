@@ -45,7 +45,7 @@ describe('UserService', () => {
   });
 
   it('should return user name', () => {
-    userService.getUserName().subscribe(userName => {
+    userService.getUser().subscribe(userName => {
       expect(userName).toBe('John Lucas');
     });
 

@@ -1,4 +1,4 @@
-<button class="base-font" [ngStyle]="styles">
+<button class="base-font" [ngStyle]="getStyles()">
   <img *ngIf="iconPath" class="icon" src="{{iconPath}}">
   {{name}}
 </button>

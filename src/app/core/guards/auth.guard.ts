@@ -14,12 +14,13 @@ export class AuthGuard implements CanActivate {
 
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> {
+    state: RouterStateSnapshot
+  ): Observable<boolean> {
     return this.checkLogin(state.url);
   }
 
   private checkLogin(url: string): Observable<boolean> {
-    if (this.authService.isAuthenticated) {
+    if (this.authService.getAuthToken()) {
       return of(true);
     }
 

@@ -16,7 +16,7 @@ export class ButtonComponent {
   @Input() fontSize?: string;
   @Input() textColor?: string;
 
-  get styles(): ButtonStyles {
+  getStyles(): ButtonStyles {
     return {
       ...(this.fontSize && { fontSize: this.fontSize }),
       ...(this.textColor && { color: this.textColor }),

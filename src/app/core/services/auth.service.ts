@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 import { LoginResponse } from '../entities/loginResponse';
 
@@ -13,12 +12,8 @@ export class AuthService {
     private http: HttpClient,
   ) { }
 
-  get isAuthenticated(): boolean {
-    return !!this.getAuthToken();
-  }
-
   getAuthToken() {
-    return localStorage.getItem('authToken');
+    return sessionStorage.getItem('authToken');
   }
 
   login(userLogin: string, password: string): Observable<LoginResponse> {
@@ -27,20 +22,6 @@ export class AuthService {
       password
     };
 
-    return this.http.post<LoginResponse>('auth/login', loginPayload).pipe(
-      tap(({ token }: LoginResponse) => this.storeAuthToken(token))
-    );
-  }
-
-  logout() {
-    this.clearAuthToken();
-  }
-
-  private storeAuthToken(token: string) {
-    localStorage.setItem('authToken', token);
-  }
-
-  private clearAuthToken() {
-    localStorage.removeItem('authToken');
+    return this.http.post<LoginResponse>('auth/login', loginPayload);
   }
 }

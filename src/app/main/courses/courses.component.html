@@ -1,4 +1,6 @@
-<app-search></app-search>
+<app-search
+  (searchTextChange)="onSearchTextChange($event)"
+></app-search>
 
 <div class="add-button-box">
   <app-button
@@ -16,7 +18,6 @@
   <app-course-list
     [courses]="courses"
     [searchText]="searchText"
-    (doRefresh)="onDoRefresh($event)"
   ></app-course-list>
 
   <div class="load-more-box" *ngIf="showLoadMore">

@@ -17,7 +17,7 @@ export class CourseService {
     const params = model.toParams();
 
     return this.http.get<CourseDto[]>('courses', { params }).pipe(
-      map((courseDtos: CourseDto[]) => this.mapCourseDtos(courseDtos))
+      map((response: CourseDto[]) => this.mapCourseDtos(response))
     );
   }
 
@@ -29,7 +29,7 @@ export class CourseService {
 
   get(id: string): Observable<Course> {
     return this.http.get<CourseDto>(`courses/${id}`).pipe(
-      map((courseDto: CourseDto) => this.mapDtoToCourse(courseDto))
+      map((response: CourseDto) => this.mapDtoToCourse(response))
     );
   }
 
@@ -44,18 +44,18 @@ export class CourseService {
   }
 
   private mapCourseDtos(courseDtos: CourseDto[]): Course[] {
-    return courseDtos.map((courseDto: CourseDto) => this.mapDtoToCourse(courseDto));
+    return courseDtos.map((dto: CourseDto) => this.mapDtoToCourse(dto));
   }
 
-  private mapDtoToCourse(courseDto: CourseDto): Course {
+  private mapDtoToCourse(dto: CourseDto): Course {
     return new Course(
-      courseDto.id.toString(),
-      courseDto.name,
-      new Date(courseDto.date).getTime(),
-      courseDto.length,
-      courseDto.description,
-      courseDto.authors,
-      courseDto.isTopRated
+      dto.id.toString(),
+      dto.name,
+      new Date(dto.date).getTime(),
+      dto.length,
+      dto.description,
+      dto.authors,
+      dto.isTopRated
     );
   }
 

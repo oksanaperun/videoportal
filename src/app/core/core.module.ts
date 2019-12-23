@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './services/auth.service';
@@ -13,11 +16,22 @@ import { AuthHeaderInterceptor } from './interceptors/auth-header.interceptor';
 import { ApiUrlInterceptor } from './interceptors/api-url.interceptor';
 import { LoaderInterceptor } from './interceptors/loader.interceptor';
 
+import { authReducers } from './store/reducers/auth.reducers';
+import { AuthEffects } from './store/effects/auth.effects';
+
+import { environment } from 'src/environments/environment';
+
 @NgModule({
     declarations: [],
     imports: [
         CommonModule,
         HttpClientModule,
+        StoreModule.forRoot({ auth: authReducers }),
+        EffectsModule.forRoot([AuthEffects]),
+        StoreDevtoolsModule.instrument({
+            maxAge: 25,
+            logOnly: environment.production,
+          }),
     ],
     providers: [
         AuthGuard,

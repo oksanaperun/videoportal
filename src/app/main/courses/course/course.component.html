@@ -71,7 +71,7 @@
       
         <app-input
           [placeholder]="'Start typing'"
-          [value]="authorsString"
+          [value]="getAuthorsString()"
           (valueChange)="onAuthorsChange($event)"
         ></app-input>
       </div>

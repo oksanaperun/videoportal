@@ -1,11 +1,13 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 
+import { AppState } from 'src/app/core/store/models/app-state';
 import { Course } from 'src/app/core/entities';
-import { CourseService } from 'src/app/core/api/courses/course.service';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { DeleteCourseModalComponent } from '../delete-course-modal/delete-course-modal.component';
+import { RemoveCourseAction } from 'src/app/core/store/actions/courses.actions';
 
 @Component({
   selector: 'app-course-list-item',
@@ -15,12 +17,11 @@ import { DeleteCourseModalComponent } from '../delete-course-modal/delete-course
 })
 export class CourseListItemComponent {
   @Input() course: Course;
-  @Output() doRefresh = new EventEmitter<null>();
 
   constructor(
     private router: Router,
-    private coursesService: CourseService,
     private dialogService: DialogService,
+    private store: Store<AppState>,
   ) { }
 
   onEditButtonClick() {
@@ -37,8 +38,7 @@ export class CourseListItemComponent {
 
     dialog$.pipe(
       filter((shouldDelete: boolean) => shouldDelete),
-      switchMap(() => this.coursesService.remove(this.course.id)),
-      tap(() => { this.doRefresh.emit(); }),
+      tap(() => { this.store.dispatch(new RemoveCourseAction(this.course.id)); }),
     ).subscribe();
   }
 }

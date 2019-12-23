@@ -3,7 +3,7 @@
 
   <input
     placeholder="{{placeholder}}"
-    [ngStyle]="inputStyles"
+    [ngStyle]="getInputStyles()"
     [value]="value || ''"
     [type]="type || 'text'"
     (input)="onInput($event)"

@@ -1,25 +1,34 @@
-import { Component } from '@angular/core';
-import { LoginService } from 'src/app/core/services/login.service';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+
+import { AppState } from 'src/app/core/store/models/app-state';
+import { LoginAction } from 'src/app/core/store/actions/auth.actions';
+import { getLoginError } from 'src/app/core/store/selectors/auth.selectors';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']
 })
-export class LoginFormComponent {
-  errorMessage: string;
+export class LoginFormComponent implements OnInit {
+  errorMessage$: Observable<string>;
 
   private userLogin: string;
   private password: string;
 
-  constructor(private loginService: LoginService) { }
+  constructor(private store: Store<AppState>) { }
 
-  get isLoginEnabled(): boolean {
+  ngOnInit() {
+    this.errorMessage$ = this.store.select(getLoginError);
+  }
+
+  isLoginEnabled(): boolean {
     return !!this.userLogin && !!this.password;
   }
 
-  get loginButtonColor(): string {
-    return this.isLoginEnabled ? '#ffffff' : '#a8a9b4';
+  getLoginButtonColor(): string {
+    return this.isLoginEnabled() ? '#ffffff' : '#a8a9b4';
   }
 
   onUserLoginChange(userLogin: string) {
@@ -31,16 +40,13 @@ export class LoginFormComponent {
   }
 
   onLoginButtonClick() {
-    if (this.isLoginEnabled) {
-      const userData = {
-        userLogin: this.userLogin,
+    if (this.isLoginEnabled()) {
+      const loginData = {
+        login: this.userLogin,
         password: this.password,
       };
 
-      this.loginService.login(userData).subscribe(() => {
-      }, () => {
-        this.errorMessage = 'User login or password is incorrect';
-      });
+      this.store.dispatch(new LoginAction(loginData));
     }
   }
 }

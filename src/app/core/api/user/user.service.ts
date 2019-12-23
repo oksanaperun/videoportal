@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UserDto } from './dtos/user.dto';
+import { User } from '../../entities/user';
 
 @Injectable()
 export class UserService {
@@ -14,20 +15,19 @@ export class UserService {
     private authService: AuthService,
   ) { }
 
-  getUserName(): Observable<string> {
-    if (this.authService.isAuthenticated) {
-      const token = this.authService.getAuthToken();
-      const payload = {
-        token
-      };
+  getUser(): Observable<User> {
+    const token = this.authService.getAuthToken();
 
-      return this.http.post<UserDto>('auth/userinfo', payload).pipe(
-        map((userDto: UserDto) => this.transformUserResponse(userDto))
-      );
-    }
+    return this.http.post<UserDto>('auth/userinfo', { token }).pipe(
+      map((response: UserDto) => this.mapDtoToUser(response))
+    );
   }
 
-  private transformUserResponse(userDto: UserDto): string {
-    return `${userDto.name.first} ${userDto.name.last}`;
+  private mapDtoToUser(dto: UserDto): User {
+    return new User(
+      dto.id.toString(),
+      dto.name.first,
+      dto.name.last,
+    );
   }
 }

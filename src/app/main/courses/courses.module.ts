@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CoursesRoutingModule } from './courses-routing.module';
@@ -13,6 +15,9 @@ import { DeleteCourseModalComponent } from './delete-course-modal/delete-course-
 
 import { CourseService } from 'src/app/core/api/courses/course.service';
 import { DialogService } from 'src/app/core/services/dialog.service';
+
+import { coursesReducers } from 'src/app/core/store/reducers/courses.reducers';
+import { CoursesEffects } from 'src/app/core/store/effects/courses.effects';
 
 @NgModule({
     declarations: [
@@ -27,6 +32,8 @@ import { DialogService } from 'src/app/core/services/dialog.service';
         MatDialogModule,
         SharedModule,
         CoursesRoutingModule,
+        StoreModule.forFeature('courses', coursesReducers),
+        EffectsModule.forFeature([CoursesEffects]),
     ],
     providers: [
         CourseService,

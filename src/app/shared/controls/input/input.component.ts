@@ -13,7 +13,7 @@ export class InputComponent {
   @Input() type?: string;
   @Output() valueChange = new EventEmitter<string>();
 
-  get inputStyles() {
+  getInputStyles() {
     return {
       width: `calc(100% - ${this.iconPath ? '56' : '24'}px)`,
       padding: `6px 12px 6px ${this.iconPath ? '42' : '12'}px`,

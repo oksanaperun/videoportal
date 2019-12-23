@@ -1,47 +1,41 @@
-import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, switchMap, tap, throttleTime } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, tap, delay } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 
+import { AppState } from 'src/app/core/store/models/app-state';
 import { Course } from 'src/app/core/entities';
-import { CourseService } from 'src/app/core/api/courses/course.service';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs.service';
-import { SearchComponent } from 'src/app/shared/controls/search/search.component';
-import { CourseGetListActionModel } from 'src/app/core/api/courses/models/course-get-list-action.model';
-
-export const COURSES_PER_PAGE = 5;
+import { getCoursesState } from 'src/app/core/store/selectors/courses.selectors';
+import { CoursesState } from 'src/app/core/store/models/courses-state';
+import {
+  ChangeSearchTextAction,
+  IncrementCurrentPageAction
+} from 'src/app/core/store/actions/courses.actions';
+import { COURSES_PER_PAGE } from 'src/app/core/store/effects/courses.effects';
 
 @Component({
   selector: 'app-courses',
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.scss']
 })
-export class CoursesComponent implements AfterViewInit, OnDestroy {
-  @ViewChild(SearchComponent, { static: false }) searchComponent: SearchComponent;
-
+export class CoursesComponent implements AfterViewInit {
   courses$: Observable<Course[]>;
   showLoadMore = true;
   noDataMessage: string;
 
-  private searchText$: Observable<string>;
-  private currentPageSubject = new BehaviorSubject(1);
-  private currentPage$ = this.currentPageSubject.asObservable();
-  private cache: Course[];
+  private previousCoursesCount: number;
 
   constructor(
     private router: Router,
-    private coursesService: CourseService,
     private breadcrumbsService: BreadcrumbsService,
+    private store: Store<AppState>,
   ) { }
 
   ngAfterViewInit() {
     this.setBreadcrumbs();
-    this.setSearchText();
     this.setCourses();
-  }
-
-  ngOnDestroy() {
-    this.currentPageSubject.complete();
   }
 
   onAddButtonClick() {
@@ -49,11 +43,11 @@ export class CoursesComponent implements AfterViewInit, OnDestroy {
   }
 
   onLoadMoreClick() {
-    this.currentPageSubject.next(this.currentPageSubject.getValue() + 1);
+    this.store.dispatch(new IncrementCurrentPageAction());
   }
 
-  onDoRefresh() {
-    this.currentPageSubject.next(1);
+  onSearchTextChange(searchText: string) {
+    this.store.dispatch(new ChangeSearchTextAction(searchText));
   }
 
   private setBreadcrumbs() {
@@ -63,48 +57,24 @@ export class CoursesComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  private setSearchText() {
-    this.searchText$ = this.searchComponent.getSearchTextChange().pipe(
-      filter((text: string) => !text || text.length > 2),
-      map((text: string) => text.trim()),
-      distinctUntilChanged(),
-      throttleTime(200),
-    );
-  }
-
   private setCourses() {
-    this.courses$ = combineLatest(
-      this.currentPage$,
-      this.searchText$,
-    ).pipe(
-      switchMap(([currentPage, searchText]) => this.getCourses(currentPage, searchText)),
-      map(() => this.cache),
+    this.courses$ = this.store.select(getCoursesState).pipe(
+      delay(0),
+      tap((state: CoursesState) => { this.setNoDataMessage(state.items, state.searchText); }),
+      map((state: CoursesState) => state.items),
+      tap((courses: Course[]) => { this.handleLoadMoreDisplay(courses); }),
     );
   }
 
-  private getCourses(currentPage: number, searchText: string): Observable<Course[]> {
-    const startIndex = (currentPage - 1) * COURSES_PER_PAGE;
-    const getListModel = new CourseGetListActionModel(startIndex, COURSES_PER_PAGE, searchText, 'date');
-
-    return this.coursesService.getList(getListModel).pipe(
-      tap((courses) => {
-        currentPage > 1
-          ? this.cache = [...this.cache, ...courses]
-          : this.cache = courses;
-
-        this.setNoDataMessage(searchText);
-        this.handleLoadMoreDisplay(courses);
-      }),
-    );
-  }
-
-  private setNoDataMessage(searchText: string) {
-    this.noDataMessage = !this.cache.length
+  private setNoDataMessage(courses: Course[], searchText: string) {
+    this.noDataMessage = !courses.length
       ? (searchText ? 'no courses found' : 'no data. feel free to add new course')
       : '';
   }
 
   private handleLoadMoreDisplay(courses: Course[]) {
-    this.showLoadMore = courses.length >= COURSES_PER_PAGE;
+    this.showLoadMore = courses.length % COURSES_PER_PAGE === 0 &&
+      this.previousCoursesCount !== courses.length;
+    this.previousCoursesCount = courses.length;
   }
 }
