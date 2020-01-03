@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { delay } from 'rxjs/operators';
 
-import { LoaderStateService } from 'src/app/core/services/loader-state.service';
+import { AppState } from 'src/app/core/store/models/app-state';
+import { getLoaderState } from 'src/app/core/store/loader-store';
 
 @Component({
   selector: 'app-loader',
@@ -13,10 +14,10 @@ export class LoaderComponent implements OnInit {
   showLoader$: Observable<boolean>;
 
   constructor(
-    private loaderStateService: LoaderStateService,
+    private store: Store<AppState>,
   ) { }
 
   ngOnInit() {
-    this.showLoader$ = this.loaderStateService.getLoaderState().pipe(delay(0));
+    this.showLoader$ = this.store.select(getLoaderState) as Observable<boolean>;
   }
 }

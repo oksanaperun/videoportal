@@ -1,19 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 
-import { LoginService } from 'src/app/core/services/login.service';
 import { LoginFormComponent } from './login-form.component';
 
 describe('LoginFormComponent', () => {
   let component: LoginFormComponent;
   let fixture: ComponentFixture<LoginFormComponent>;
 
-  let mockLoginService;
+  let mockStore;
 
   beforeEach(() => {
-    mockLoginService = {
-      login: jasmine.createSpy().and.returnValue(of())
+    mockStore = {
+      dispatch: jasmine.createSpy(),
+      select: jasmine.createSpy().and.returnValue(of('')),
     };
   });
 
@@ -22,7 +23,7 @@ describe('LoginFormComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [LoginFormComponent],
       providers: [
-        { provide: LoginService, useValue: mockLoginService },
+        { provide: Store, useValue: mockStore },
       ]
     })
       .compileComponents();

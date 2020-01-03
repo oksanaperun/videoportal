@@ -1,12 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
+import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 
-import { CourseService } from 'src/app/core/api/courses/course.service';
-import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs.service';
-
+import { INCREMENT_CURRENT_PAGE } from 'src/app/core/store/courses-store';
 import { CoursesComponent } from './courses.component';
 import { SearchComponent } from 'src/app/shared/controls/search/search.component';
 
@@ -14,9 +13,8 @@ describe('CoursesComponent', () => {
   let component: CoursesComponent;
   let fixture: ComponentFixture<CoursesComponent>;
 
-  let mockCourseService;
-  let mockBreadcrumbsService;
   let mockRouter;
+  let mockStore;
 
   const courses = [
     { id: 'a', title: 'Title A' },
@@ -47,17 +45,16 @@ describe('CoursesComponent', () => {
   }
 
   beforeEach(() => {
-    mockCourseService = {
-      getList: jasmine.createSpy().and.returnValue(of(courses)),
-      removeItemById: jasmine.createSpy().and.returnValue(of(null))
-    };
-
-    mockBreadcrumbsService = {
-      setMainRoute: jasmine.createSpy()
-    };
-
     mockRouter = {
       navigate: jasmine.createSpy()
+    };
+
+    mockStore = {
+      dispatch: jasmine.createSpy(),
+      select: jasmine.createSpy().and.returnValue(of({
+        items: courses,
+        searchText: '',
+      })),
     };
   });
 
@@ -70,9 +67,8 @@ describe('CoursesComponent', () => {
         MockSearchComponent,
       ],
       providers: [
-        { provide: CourseService, useValue: mockCourseService },
-        { provide: BreadcrumbsService, useValue: mockBreadcrumbsService },
         { provide: Router, useValue: mockRouter },
+        { provide: Store, useValue: mockStore },
       ]
     })
       .compileComponents();
@@ -84,12 +80,16 @@ describe('CoursesComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should set courses list', () => {
-    const courseListDebugEl = fixture.debugElement.query(By.directive(MockCourseListComponent));
-    const courseListComponent = courseListDebugEl.componentInstance;
+  it('should set courses list', async(() => {
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
 
-    expect(courseListComponent.courses).toEqual(courses);
-  });
+      const courseListDebugEl = fixture.debugElement.query(By.directive(MockCourseListComponent));
+      const courseListComponent = courseListDebugEl.componentInstance;
+
+      expect(courseListComponent.courses).toEqual(courses);
+    });
+  }));
 
   it('should set add button name', () => {
     const addButtonEl = fixture.debugElement.query(By.css('app-button')).nativeElement;
@@ -111,12 +111,17 @@ describe('CoursesComponent', () => {
     expect(mockRouter.navigate).toHaveBeenCalledWith(['courses', 'new']);
   });
 
-  it('should load courses on load more click event', () => {
-    const loadMoreEl = fixture.debugElement.query(By.css('.load-more-box span')).nativeElement;
+  it('should increment current page number on load more click event', async(() => {
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
 
-    loadMoreEl.dispatchEvent(new Event('click'));
+      const loadMoreEl = fixture.debugElement.query(By.css('.load-more-box span')).nativeElement;
 
-    expect(mockCourseService.getList.calls.mostRecent().args)
-      .toEqual([5, 5, undefined, 'date']);
-  });
+      loadMoreEl.dispatchEvent(new Event('click'));
+
+      const storeAction = mockStore.dispatch.calls.mostRecent().args[0];
+
+      expect(storeAction.type).toBe(INCREMENT_CURRENT_PAGE);
+    });
+  }));
 });

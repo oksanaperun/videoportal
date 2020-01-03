@@ -13,7 +13,9 @@ describe('LoginGuard', () => {
       navigate: jasmine.createSpy()
     };
 
-    mockAuthService = {};
+    mockAuthService = {
+      getAuthToken: jasmine.createSpy().and.returnValue('some_token')
+    };
   });
 
   beforeEach(() => {

@@ -12,11 +12,10 @@ describe('CourseListComponent', () => {
   const course2 = { a: 456 };
 
   @Component({
-    template: '<app-course-list [courses]="courses" (doRefresh)="onDoRefresh($event)"></app-course-list>'
+    template: '<app-course-list [courses]="courses"></app-course-list>'
   })
   class HostCourseListComponent {
     courses: any[];
-    onDoRefresh() { }
   }
 
   @Component({
@@ -58,15 +57,5 @@ describe('CourseListComponent', () => {
     const courseComponent = courseDebugEl.componentInstance;
 
     expect(courseComponent.course).toEqual(course1);
-  });
-
-  it('should handle do refresh event', () => {
-    const courseDebugEl = hostFixture.debugElement.query(By.directive(MockCourseListItemComponent));
-    const courseComponent = courseDebugEl.componentInstance;
-    const onDoRefreshSpy = spyOn(hostComponent, 'onDoRefresh');
-
-    courseComponent.doRefresh.emit();
-
-    expect(onDoRefreshSpy).toHaveBeenCalledWith(undefined);
   });
 });

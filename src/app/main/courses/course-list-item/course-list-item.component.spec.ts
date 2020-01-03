@@ -2,10 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, Pipe, PipeTransform, Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 
 import { Course } from 'src/app/core/entities';
-import { CourseService } from 'src/app/core/api/courses/course.service';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { CourseListItemComponent } from './course-list-item.component';
 
@@ -14,8 +14,8 @@ describe('CourseListItemComponent', () => {
   let hostFixture: ComponentFixture<HostCourseListItemComponent>;
 
   let mockRouter;
-  let mockCourseService;
   let mockDialogService;
+  let mockStore;
 
   const id = 'some_id';
   const title = 'some_title';
@@ -34,13 +34,11 @@ describe('CourseListItemComponent', () => {
     template: `
       <app-course-list-item
         [course]="course"
-        (doRefresh)="onDoRefresh($event)"
       ></app-course-list-item>
     `
   })
   class HostCourseListItemComponent {
     course: Course;
-    onDoRefresh() { }
   }
 
   beforeEach(() => {
@@ -48,12 +46,12 @@ describe('CourseListItemComponent', () => {
       navigate: jasmine.createSpy()
     };
 
-    mockCourseService = {
-      remove: () => of(null),
-    };
-
     mockDialogService = {
       openModal: () => of(null),
+    };
+
+    mockStore = {
+      dispatch: jasmine.createSpy(),
     };
   });
 
@@ -67,8 +65,8 @@ describe('CourseListItemComponent', () => {
       ],
       providers: [
         { provide: Router, useValue: mockRouter },
-        { provide: CourseService, useValue: mockCourseService },
         { provide: DialogService, useValue: mockDialogService },
+        { provide: Store, useValue: mockStore },
       ]
     })
       .compileComponents();

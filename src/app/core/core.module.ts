@@ -8,16 +8,15 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './services/auth.service';
-import { BreadcrumbsService } from './services/breadcrumbs.service';
-import { LoaderStateService } from './services/loader-state.service';
 import { UserService } from './api/user/user.service';
 
 import { AuthHeaderInterceptor } from './interceptors/auth-header.interceptor';
 import { ApiUrlInterceptor } from './interceptors/api-url.interceptor';
 import { LoaderInterceptor } from './interceptors/loader.interceptor';
 
-import { authReducers } from './store/reducers/auth.reducers';
-import { AuthEffects } from './store/effects/auth.effects';
+import { authReducers, AuthEffects } from './store/auth-store';
+import { breadcrumbsReducers } from './store/breadcrumbs-store';
+import { loaderReducers } from './store/loader-store';
 
 import { environment } from 'src/environments/environment';
 
@@ -26,7 +25,11 @@ import { environment } from 'src/environments/environment';
     imports: [
         CommonModule,
         HttpClientModule,
-        StoreModule.forRoot({ auth: authReducers }),
+        StoreModule.forRoot({
+            auth: authReducers,
+            breadcrumbs: breadcrumbsReducers,
+            loading: loaderReducers,
+        }),
         EffectsModule.forRoot([AuthEffects]),
         StoreDevtoolsModule.instrument({
             maxAge: 25,
@@ -36,8 +39,6 @@ import { environment } from 'src/environments/environment';
     providers: [
         AuthGuard,
         AuthService,
-        BreadcrumbsService,
-        LoaderStateService,
         UserService,
         {
             provide: HTTP_INTERCEPTORS,

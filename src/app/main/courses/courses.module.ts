@@ -16,8 +16,7 @@ import { DeleteCourseModalComponent } from './delete-course-modal/delete-course-
 import { CourseService } from 'src/app/core/api/courses/course.service';
 import { DialogService } from 'src/app/core/services/dialog.service';
 
-import { coursesReducers } from 'src/app/core/store/reducers/courses.reducers';
-import { CoursesEffects } from 'src/app/core/store/effects/courses.effects';
+import { coursesReducers, CoursesEffects } from 'src/app/core/store/courses-store';
 
 @NgModule({
     declarations: [

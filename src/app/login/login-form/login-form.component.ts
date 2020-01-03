@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 import { AppState } from 'src/app/core/store/models/app-state';
-import { LoginAction } from 'src/app/core/store/actions/auth.actions';
-import { getLoginError } from 'src/app/core/store/selectors/auth.selectors';
-import { Observable } from 'rxjs';
+import { LoginAction, getLoginError } from 'src/app/core/store/auth-store';
 
 @Component({
   selector: 'app-login-form',

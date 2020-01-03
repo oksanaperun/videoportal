@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs.service';
 import { BreadcrumbRoute } from 'src/app/core/entities';
+import { AppState } from 'src/app/core/store/models/app-state';
+import { getBreadcrumbsState } from 'src/app/core/store/breadcrumbs-store';
 
 @Component({
   selector: 'app-breadcrumbs',
@@ -15,11 +17,11 @@ export class BreadcrumbsComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private breadcrumbsService: BreadcrumbsService,
+    private store: Store<AppState>,
   ) { }
 
   ngOnInit() {
-    this.routes$ = this.breadcrumbsService.getRoutes();
+    this.routes$ = this.store.select(getBreadcrumbsState) as Observable<BreadcrumbRoute[]>;
   }
 
   onRouteClick(path: string[]) {

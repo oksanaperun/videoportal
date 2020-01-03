@@ -6,14 +6,14 @@ import { Store } from '@ngrx/store';
 
 import { AppState } from 'src/app/core/store/models/app-state';
 import { Course } from 'src/app/core/entities';
-import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs.service';
-import { getCoursesState } from 'src/app/core/store/selectors/courses.selectors';
-import { CoursesState } from 'src/app/core/store/models/courses-state';
 import {
+  getCoursesState,
+  COURSES_PER_PAGE,
   ChangeSearchTextAction,
   IncrementCurrentPageAction
-} from 'src/app/core/store/actions/courses.actions';
-import { COURSES_PER_PAGE } from 'src/app/core/store/effects/courses.effects';
+} from 'src/app/core/store/courses-store';
+import { CoursesState } from 'src/app/core/store/models/courses-state';
+import { SetMainRoute } from 'src/app/core/store/breadcrumbs-store';
 
 @Component({
   selector: 'app-courses',
@@ -29,7 +29,6 @@ export class CoursesComponent implements AfterViewInit {
 
   constructor(
     private router: Router,
-    private breadcrumbsService: BreadcrumbsService,
     private store: Store<AppState>,
   ) { }
 
@@ -51,10 +50,10 @@ export class CoursesComponent implements AfterViewInit {
   }
 
   private setBreadcrumbs() {
-    this.breadcrumbsService.setMainRoute({
+    this.store.dispatch(new SetMainRoute({
       path: ['courses'],
       title: 'Courses'
-    });
+    }));
   }
 
   private setCourses() {

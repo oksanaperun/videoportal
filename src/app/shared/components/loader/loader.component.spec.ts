@@ -1,19 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 
-import { LoaderStateService } from 'src/app/core/services/loader-state.service';
 import { LoaderComponent } from './loader.component';
+
 
 describe('LoaderComponent', () => {
   let component: LoaderComponent;
   let fixture: ComponentFixture<LoaderComponent>;
 
-  let mockLoaderStateService;
+  let mockStore;
 
   beforeEach(() => {
-    mockLoaderStateService = {
-      getLoaderState: () => of(false),
+    mockStore = {
+      select: jasmine.createSpy().and.returnValue(of(false)),
     };
   });
 
@@ -22,7 +23,7 @@ describe('LoaderComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [LoaderComponent],
       providers: [
-        { provide: LoaderStateService, useValue: mockLoaderStateService },
+        { provide: Store, useValue: mockStore },
       ]
     })
       .compileComponents();

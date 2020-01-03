@@ -1,4 +1,4 @@
-import { AuthActionTypes, LOGIN_SUCCESS, LOGIN_FAIL, SET_USER } from '../actions/auth.actions';
+import { AuthActionTypes, LOGIN_SUCCESS, LOGIN_FAIL, SET_USER } from './auth.actions';
 import { AuthState } from '../models/auth-state';
 
 export const initialState: AuthState = {

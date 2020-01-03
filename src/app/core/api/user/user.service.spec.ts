@@ -4,6 +4,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { AuthService } from '../../services/auth.service';
 import { UserDto } from './dtos/user.dto';
 import { UserService } from './user.service';
+import { User } from '../../entities';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -18,6 +19,7 @@ describe('UserService', () => {
     token = 'some_token';
 
     userDto = {
+      id: 145,
       name: {
         first: 'John',
         last: 'Lucas'
@@ -45,8 +47,8 @@ describe('UserService', () => {
   });
 
   it('should return user name', () => {
-    userService.getUser().subscribe(userName => {
-      expect(userName).toBe('John Lucas');
+    userService.getUser().subscribe(user => {
+      expect(user).toEqual(new User('145', 'John', 'Lucas'));
     });
 
     const req = mockHttp.expectOne('auth/userinfo');

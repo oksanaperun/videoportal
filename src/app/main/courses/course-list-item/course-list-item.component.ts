@@ -7,7 +7,7 @@ import { AppState } from 'src/app/core/store/models/app-state';
 import { Course } from 'src/app/core/entities';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { DeleteCourseModalComponent } from '../delete-course-modal/delete-course-modal.component';
-import { RemoveCourseAction } from 'src/app/core/store/actions/courses.actions';
+import { RemoveCourseAction } from 'src/app/core/store/courses-store';
 
 @Component({
   selector: 'app-course-list-item',

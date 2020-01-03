@@ -6,9 +6,9 @@ import { Store } from '@ngrx/store';
 
 import { AppState } from 'src/app/core/store/models/app-state';
 import { CourseService } from 'src/app/core/api/courses/course.service';
-import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs.service';
 import { Course, Author } from 'src/app/core/entities';
-import { AddCourseAction, EditCourseAction } from 'src/app/core/store/actions/courses.actions';
+import { AddCourseAction, EditCourseAction } from 'src/app/core/store/courses-store';
+import { SetChildRoute } from 'src/app/core/store/breadcrumbs-store';
 
 // TODO Workaround until dropdown implementation
 const TEST_AUTHOR = {
@@ -27,7 +27,7 @@ export class CourseComponent implements OnInit, OnChanges {
   course: Course;
 
   title: string;
-  descripiton: string;
+  description: string;
   duration: number;
   date = Date.now();
   authors: Author[] = [];
@@ -37,7 +37,6 @@ export class CourseComponent implements OnInit, OnChanges {
     private router: Router,
     private route: ActivatedRoute,
     private coursesService: CourseService,
-    private breadcrumbsService: BreadcrumbsService,
     private store: Store<AppState>,
   ) { }
 
@@ -68,7 +67,7 @@ export class CourseComponent implements OnInit, OnChanges {
   }
 
   onDescriptionChange(value: string) {
-    this.descripiton = value;
+    this.description = value;
   }
 
   onDurationChange(value: number) {
@@ -89,7 +88,7 @@ export class CourseComponent implements OnInit, OnChanges {
       this.title,
       this.date,
       this.duration,
-      this.descripiton,
+      this.description,
       this.authors.length ? this.authors : [TEST_AUTHOR],
       this.course ? this.course.topRated : undefined
     );
@@ -108,10 +107,10 @@ export class CourseComponent implements OnInit, OnChanges {
       tap(() => {
         this.formTitle = 'New course';
 
-        this.breadcrumbsService.setChildRoute({
+        this.store.dispatch(new SetChildRoute({
           path: ['courses', 'new'],
           title: 'New course'
-        });
+        }));
       })
     );
   }
@@ -123,10 +122,10 @@ export class CourseComponent implements OnInit, OnChanges {
           this.formTitle = course.title;
           this.setCourseData(course);
 
-          this.breadcrumbsService.setChildRoute({
+          this.store.dispatch(new SetChildRoute({
             path: ['courses', course.id],
             title: course.title
-          });
+          }));
         } else {
           this.router.navigate(['404']);
         }
@@ -136,7 +135,7 @@ export class CourseComponent implements OnInit, OnChanges {
 
   private setCourseData(course: Course) {
     this.title = course.title;
-    this.descripiton = course.description;
+    this.description = course.description;
     this.duration = course.duration;
     this.date = course.creationDate;
     this.authors = course.authors;

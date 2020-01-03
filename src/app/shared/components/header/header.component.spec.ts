@@ -2,10 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 
-import { AuthService } from 'src/app/core/services/auth.service';
-import { UserService } from 'src/app/core/api/user/user.service';
+import { LOGOUT } from 'src/app/core/store/auth-store';
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
@@ -13,21 +13,18 @@ describe('HeaderComponent', () => {
   let fixture: ComponentFixture<HeaderComponent>;
 
   let mockRouter;
-  let mockAuthService;
-  let mockUserService;
+  let mockStore;
 
   beforeEach(() => {
     mockRouter = {
       navigate: jasmine.createSpy()
     };
 
-    mockAuthService = {
-      logout: jasmine.createSpy(),
-      isAuthenticated: true
-    };
-
-    mockUserService = {
-      getUserName: () => of('User login')
+    mockStore = {
+      dispatch: jasmine.createSpy(),
+      select: jasmine.createSpy().and.returnValue(of({
+        getUserName: () => 'User login'
+      })),
     };
   });
 
@@ -37,8 +34,7 @@ describe('HeaderComponent', () => {
       declarations: [HeaderComponent],
       providers: [
         { provide: Router, useValue: mockRouter },
-        { provide: AuthService, useValue: mockAuthService },
-        { provide: UserService, useValue: mockUserService },
+        { provide: Store, useValue: mockStore },
       ]
     })
       .compileComponents();
@@ -74,19 +70,13 @@ describe('HeaderComponent', () => {
     expect(logoutEl.iconPath).toBe('assets/img/exit.png');
   });
 
-  describe('on logout button click', () => {
-    beforeEach(() => {
-      const logoutEl = fixture.debugElement.queryAll(By.css('app-button'))[1].nativeElement;
+  it('should logout user on logout button click', () => {
+    const logoutEl = fixture.debugElement.queryAll(By.css('app-button'))[1].nativeElement;
 
-      logoutEl.dispatchEvent(new Event('click'));
-    });
+    logoutEl.dispatchEvent(new Event('click'));
 
-    it('should logout user', () => {
-      expect(mockAuthService.logout).toHaveBeenCalledWith();
-    });
+    const storeAction = mockStore.dispatch.calls.mostRecent().args[0];
 
-    it('should navigate user to login', () => {
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['login']);
-    });
+    expect(storeAction.type).toBe(LOGOUT);
   });
 });

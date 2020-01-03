@@ -2,11 +2,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, Pipe, PipeTransform, Component, EventEmitter, Output } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 
 import { CourseService } from 'src/app/core/api/courses/course.service';
-import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs.service';
-import { Course, Author } from 'src/app/core/entities';
+import { Author } from 'src/app/core/entities';
 import { CourseComponent } from './course.component';
 
 describe('CourseComponent', () => {
@@ -16,7 +16,7 @@ describe('CourseComponent', () => {
   let mockRouter;
   let mockRoute;
   let mockCourseService;
-  let mockBreadcrumbsService;
+  let mockStore;
 
   const author1: Author = {
     id: 7458,
@@ -94,8 +94,8 @@ describe('CourseComponent', () => {
       update: () => of(null),
     };
 
-    mockBreadcrumbsService = {
-      setChildRoute: jasmine.createSpy()
+    mockStore = {
+      dispatch: jasmine.createSpy(),
     };
   });
 
@@ -113,7 +113,7 @@ describe('CourseComponent', () => {
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockRoute },
         { provide: CourseService, useValue: mockCourseService },
-        { provide: BreadcrumbsService, useValue: mockBreadcrumbsService },
+        { provide: Store, useValue: mockStore },
       ]
     })
       .compileComponents();
@@ -131,7 +131,7 @@ describe('CourseComponent', () => {
     });
 
     it('should set description', () => {
-      expect(component.descripiton).toBe('some description');
+      expect(component.description).toBe('some description');
     });
 
     it('should set duration', () => {
@@ -164,7 +164,7 @@ describe('CourseComponent', () => {
 
     descriptionInputComponent.valueChange.emit(newDescription);
 
-    expect(component.descripiton).toBe(newDescription);
+    expect(component.description).toBe(newDescription);
   });
 
   it('should have updated duration', () => {

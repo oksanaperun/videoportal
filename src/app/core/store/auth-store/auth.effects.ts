@@ -4,7 +4,7 @@ import { Effect, Actions, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { switchMap, tap, map, catchError } from 'rxjs/operators';
 
-import * as authActions from '../actions/auth.actions';
+import * as authActions from './auth.actions';
 import { LoginResponse, User } from '../../entities';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../api/user/user.service';
@@ -29,12 +29,10 @@ export class AuthEffects {
     ),
   );
 
-  @Effect()
+  @Effect({ dispatch: false })
   loginSuccess$ = this.actions.pipe(
     ofType(authActions.LOGIN_SUCCESS),
     tap((action: authActions.LoginSuccessAction) => { this.storeAuthToken(action.payload.token); }),
-    switchMap(() => this.userService.getUser()),
-    map((user: User) => new authActions.SetUserAction(user)),
     tap(() => { this.redirectOnLoginSuccess(); }),
   );
 

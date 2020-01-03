@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { switchMap, tap, map, withLatestFrom } from 'rxjs/operators';
 
-import * as coursesActions from '../actions/courses.actions';
+import * as coursesActions from './courses.actions';
 import { CourseService } from '../../api/courses/course.service';
 import { Course } from '../../entities';
 import { AppState } from '../models/app-state';

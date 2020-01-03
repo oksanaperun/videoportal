@@ -36,7 +36,7 @@ describe('AuthGuard', () => {
 
   describe('when user is authenticated', () => {
     beforeEach(() => {
-      mockAuthService.isAuthenticated = true;
+      mockAuthService.getAuthToken = () => 'some_token';
     });
 
     it('should activate route', inject([AuthGuard], (guard: AuthGuard) => {
@@ -58,7 +58,7 @@ describe('AuthGuard', () => {
 
   describe('when user is NOT authenticated', () => {
     beforeEach(() => {
-      mockAuthService.isAuthenticated = false;
+      mockAuthService.getAuthToken = () => '';
     });
 
     it('should NOT activate route', inject([AuthGuard], (guard: AuthGuard) => {

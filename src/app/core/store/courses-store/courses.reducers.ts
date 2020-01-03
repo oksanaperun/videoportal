@@ -3,7 +3,7 @@ import {
   LOAD_COURSES_SUCCESS,
   CHANGE_SEARCH_TEXT,
   CHANGE_CURRENT_PAGE,
-} from '../actions/courses.actions';
+} from './courses.actions';
 import { CoursesState } from '../models/courses-state';
 
 export const initialState: CoursesState = {
