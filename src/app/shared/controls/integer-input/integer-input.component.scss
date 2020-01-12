@@ -5,8 +5,13 @@ input {
   padding: 6px 12px;
   border: solid 1px #d9dbe3;
   color: #2c2f3c;
+  outline: none;
 
   &::placeholder {
     color: #c0c3ce;
+  }
+
+  &.invalid {
+    border: 1px solid #ff4e33;
   }
 }

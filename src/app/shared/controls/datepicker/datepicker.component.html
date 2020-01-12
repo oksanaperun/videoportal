@@ -1,0 +1,10 @@
+<div class="app-datepicker">
+  <input
+    [class.invalid]="invalid"
+    [matDatepicker]="dateInput"
+    [placeholder]="placeholder"
+    [value]="value"
+    (dateInput)="onInput($event)">
+  <mat-datepicker-toggle [for]="dateInput"></mat-datepicker-toggle>
+  <mat-datepicker #dateInput></mat-datepicker>
+</div>

@@ -34,6 +34,7 @@ export class CoursesComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.setBreadcrumbs();
+    this.setEmptySearchText();
     this.setCourses();
   }
 
@@ -63,6 +64,10 @@ export class CoursesComponent implements AfterViewInit {
       map((state: CoursesState) => state.items),
       tap((courses: Course[]) => { this.handleLoadMoreDisplay(courses); }),
     );
+  }
+
+  private setEmptySearchText() {
+    this.store.dispatch(new ChangeSearchTextAction(''));
   }
 
   private setNoDataMessage(courses: Course[], searchText: string) {

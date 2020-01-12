@@ -1,5 +1,6 @@
 <textarea
   placeholder="{{placeholder}}"
+  [class.invalid]="invalid"
   [value]="value || ''"
   (input)="onInput($event)"
 ></textarea>

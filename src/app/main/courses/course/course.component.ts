@@ -1,105 +1,119 @@
-import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable, iif, of } from 'rxjs';
 import { tap, map, mergeMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { AppState } from 'src/app/core/store/models/app-state';
 import { CourseService } from 'src/app/core/api/courses/course.service';
-import { Course, Author } from 'src/app/core/entities';
+import { Course, Author, SelectOption } from 'src/app/core/entities';
 import { AddCourseAction, EditCourseAction } from 'src/app/core/store/courses-store';
 import { SetChildRoute } from 'src/app/core/store/breadcrumbs-store';
-
-// TODO Workaround until dropdown implementation
-const TEST_AUTHOR = {
-  id: 7458,
-  name: 'Deana',
-  lastName: 'Bruce'
-};
+import { AuthorService } from 'src/app/core/api/author/author.service';
+import { AuthorDto } from 'src/app/core/api/author/dtos/author.dto';
 
 @Component({
   selector: 'app-course',
   templateUrl: './course.component.html',
   styleUrls: ['./course.component.scss']
 })
-export class CourseComponent implements OnInit, OnChanges {
+export class CourseComponent implements OnInit {
   formTitle: string;
-  course: Course;
 
-  title: string;
-  description: string;
-  duration: number;
-  date = Date.now();
-  authors: Author[] = [];
-  errorMessage: string;
+  authorOptions$: Observable<SelectOption[]>;
+
+  courseForm = new FormGroup({
+    title: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+    description: new FormControl('', [Validators.required, Validators.maxLength(500)]),
+    duration: new FormControl(0, [Validators.required, Validators.min(1)]),
+    date: new FormControl(null, Validators.required),
+    authors: new FormControl([], Validators.required),
+  });
+
+  private courseId: string;
+  private isCourseTopRated = false;
+  private authorsSourceData: AuthorDto[];
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private coursesService: CourseService,
     private store: Store<AppState>,
+    private authorService: AuthorService,
   ) { }
 
   ngOnInit() {
-    this.route.paramMap.pipe(
-      map((params: ParamMap) => params.get('id')),
-      mergeMap((id: string) => iif(() => id === 'new', this.handleNewCourse(), this.handleEditCourse(id))),
-    ).subscribe((course?: Course) => {
-      this.course = course;
-    });
+    this.getCourse();
+    this.getAuthors();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    const course = changes.course ? changes.course.currentValue : null;
-
-    if (course) {
-      this.setCourseData(course);
-    }
-  }
-
-  // TODO Workaround until dropdown implementation
-  getAuthorsString(): string {
-    return this.authors.map(({ name, lastName }) => `${name} ${lastName}`).join(', ');
-  }
-
-  onTitleChange(value: string) {
-    this.title = value;
-  }
-
-  onDescriptionChange(value: string) {
-    this.description = value;
-  }
-
-  onDurationChange(value: number) {
-    this.duration = value;
-  }
-
-  onDateChange(value: number) {
-    this.date = value;
-  }
-
-  onAuthorsChange(value: string) {
-    this.authors = [TEST_AUTHOR];
-  }
-
-  onSaveButtonClick() {
+  onSubmit() {
+    const { title, description, duration, date, authors } = this.courseForm.value;
     const newCourse = new Course(
-      this.course ? this.course.id : null,
-      this.title,
-      this.date,
-      this.duration,
-      this.description,
-      this.authors.length ? this.authors : [TEST_AUTHOR],
-      this.course ? this.course.topRated : undefined
+      this.courseId || null,
+      title,
+      date,
+      duration,
+      description,
+      this.mapSelectOptionsToAuthors(authors),
+      this.isCourseTopRated,
     );
 
-    this.course
+    this.courseId
       ? this.updateCourse(newCourse)
       : this.createCourse(newCourse);
   }
 
   onCancelButtonClick() {
     this.router.navigate(['courses']);
+  }
+
+  getSubmitButtonColor(): string {
+    return this.courseForm.valid ? '#ffffff' : '#a8a9b4';
+  }
+
+  isControlValid(controlName: string): boolean {
+    const control = this.courseForm.controls[controlName];
+
+    return !control.dirty || control.valid;
+  }
+
+  isControlRequiredError(controlName: string): boolean {
+    const control = this.courseForm.controls[controlName];
+
+    return control.dirty && control.errors && control.errors.required;
+  }
+
+  isControlMaxLengthError(controlName: string): boolean {
+    const control = this.courseForm.controls[controlName];
+
+    return control.dirty && control.errors && control.errors.maxlength;
+  }
+
+  isControlMinError(controlName: string): boolean {
+    const control = this.courseForm.controls[controlName];
+
+    return control.dirty && control.errors && control.errors.min;
+  }
+
+  private getCourse() {
+    this.route.paramMap.pipe(
+      map((params: ParamMap) => params.get('id')),
+      mergeMap((id: string) => iif(() => id === 'new', this.handleNewCourse(), this.handleEditCourse(id))),
+    ).subscribe((course?: Course) => {
+      if (course) {
+        this.setCourseData(course);
+      }
+    });
+  }
+
+  private getAuthors() {
+    this.authorOptions$ = this.authorService.get().pipe(
+      tap((authors: AuthorDto[]) => { this.authorsSourceData = authors; }),
+      map((authors: AuthorDto[]) => this.mapAuthorsToSelectOptions(authors)),
+      map((options: SelectOption[]) => options.sort(this.sortAuthorOptions)),
+    );
   }
 
   private handleNewCourse(): Observable<any> {
@@ -134,11 +148,35 @@ export class CourseComponent implements OnInit, OnChanges {
   }
 
   private setCourseData(course: Course) {
-    this.title = course.title;
-    this.description = course.description;
-    this.duration = course.duration;
-    this.date = course.creationDate;
-    this.authors = course.authors;
+    this.courseId = course.id;
+    this.isCourseTopRated = course.topRated;
+
+    this.courseForm.setValue({
+      title: course.title,
+      description: course.description,
+      duration: course.duration,
+      date: course.creationDate,
+      authors: this.mapAuthorsToSelectOptions(course.authors)
+    });
+  }
+
+  private mapAuthorsToSelectOptions(authors: Author[]): SelectOption[] {
+    return authors.map(author => ({
+      id: author.id,
+      label: `${author.name} ${author.lastName}`,
+    }));
+  }
+
+  private mapSelectOptionsToAuthors(options: SelectOption[]): Author[] {
+    return options.map((option: SelectOption) => {
+      const { id, name, lastName } = this.authorsSourceData.find(author => author.id === option.id);
+
+      return new Author(id, name, lastName);
+    });
+  }
+
+  private sortAuthorOptions(option1: SelectOption, option2: SelectOption): number {
+    return option1.label < option2.label ? -1 : (option1.label > option2.label ? 1 : 0);
   }
 
   private createCourse(course: Course) {

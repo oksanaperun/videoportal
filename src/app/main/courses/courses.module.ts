@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
@@ -15,6 +16,7 @@ import { DeleteCourseModalComponent } from './delete-course-modal/delete-course-
 
 import { CourseService } from 'src/app/core/api/courses/course.service';
 import { DialogService } from 'src/app/core/services/dialog.service';
+import { AuthorService } from 'src/app/core/api/author/author.service';
 
 import { coursesReducers, CoursesEffects } from 'src/app/core/store/courses-store';
 
@@ -28,6 +30,8 @@ import { coursesReducers, CoursesEffects } from 'src/app/core/store/courses-stor
     ],
     imports: [
         CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
         MatDialogModule,
         SharedModule,
         CoursesRoutingModule,
@@ -37,6 +41,7 @@ import { coursesReducers, CoursesEffects } from 'src/app/core/store/courses-stor
     providers: [
         CourseService,
         DialogService,
+        AuthorService,
     ],
     entryComponents: [DeleteCourseModalComponent]
 })

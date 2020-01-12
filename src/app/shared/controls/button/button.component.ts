@@ -15,6 +15,7 @@ export class ButtonComponent {
   @Input() iconPath?: string;
   @Input() fontSize?: string;
   @Input() textColor?: string;
+  @Input() disabled?: boolean;
 
   getStyles(): ButtonStyles {
     return {

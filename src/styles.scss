@@ -20,7 +20,8 @@ body {
   background-color: #f2f3f7;
 }
 
-.base-font {
+.base-font,
+mat-option .mat-option-text {
   font-family: SourceSansPro;
   font-size: 14px;
   font-weight: normal;

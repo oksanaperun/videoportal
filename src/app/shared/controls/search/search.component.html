@@ -1,7 +1,7 @@
 <app-input
   class="search-input"
+  [formControl]="searchText"
   [placeholder]="'Text to search'"
   [iconPath]="'assets/img/search.png'"
   [inputHeight]="'34px'"
-  (valueChange)="onSearchTextChange($event)"
 ></app-input>

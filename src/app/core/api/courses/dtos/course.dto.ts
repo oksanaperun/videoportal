@@ -1,4 +1,4 @@
-import { CourseAuthorDto } from './course-author.dto';
+import { AuthorDto } from 'src/app/core/api/author/dtos/author.dto';
 
 export class CourseDto {
   constructor(
@@ -7,7 +7,7 @@ export class CourseDto {
     public date: string,
     public length: number,
     public description: string,
-    public authors: CourseAuthorDto[],
+    public authors: AuthorDto[],
     public isTopRated: boolean
   ) { }
 }
