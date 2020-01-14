@@ -72,7 +72,7 @@ describe('ButtonComponent', () => {
     hostComponent.size = fontSize;
     hostFixture.detectChanges();
 
-    expect(component.styles).toEqual({ fontSize });
+    expect(component.getStyles()).toEqual({ fontSize });
   });
 
   it('should set button color in styles', () => {
@@ -81,6 +81,6 @@ describe('ButtonComponent', () => {
     hostComponent.color = color;
     hostFixture.detectChanges();
 
-    expect(component.styles).toEqual({ color });
+    expect(component.getStyles()).toEqual({ color });
   });
 });

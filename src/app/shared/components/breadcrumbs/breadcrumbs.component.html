@@ -1,0 +1,8 @@
+<span
+  *ngFor="let route of routes$ | async; let isLast = last"
+  class="base-font item"
+  [ngClass]="{ current: isLast }"
+  (click)="!isLast && onRouteClick(route.path)">
+  {{route.title}}
+  <span *ngIf="!isLast" class="delimiter">/</span>
+</span>

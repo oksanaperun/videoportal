@@ -1,8 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA, Component, Input, Output, EventEmitter, Pipe, PipeTransform } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Component, Input, Output, EventEmitter } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import { SortDirection } from 'src/app/core/entities';
 import { CourseListComponent } from './course-list.component';
 
 describe('CourseListComponent', () => {
@@ -13,11 +12,10 @@ describe('CourseListComponent', () => {
   const course2 = { a: 456 };
 
   @Component({
-    template: '<app-course-list [courses]="courses" (deleteCourse)="onDelete($event)"></app-course-list>'
+    template: '<app-course-list [courses]="courses"></app-course-list>'
   })
   class HostCourseListComponent {
     courses: any[];
-    onDelete() { }
   }
 
   @Component({
@@ -26,21 +24,7 @@ describe('CourseListComponent', () => {
   })
   class MockCourseListItemComponent {
     @Input() course: any;
-    @Output() deleteCourse = new EventEmitter<string>();
-  }
-
-  @Pipe({ name: 'orderByCreationDate' })
-  class MockOrderByCreationDatePipe implements PipeTransform {
-    transform(items: any[], direction: SortDirection): any[] {
-      return direction === 'DESC' ? items : [];
-    }
-  }
-
-  @Pipe({ name: 'filterByTitle' })
-  class MockFilterByTitlePipe implements PipeTransform {
-    transform(items: any[]): any[] {
-      return items;
-    }
+    @Output() doRefresh = new EventEmitter<null>();
   }
 
   beforeEach(async(() => {
@@ -50,8 +34,6 @@ describe('CourseListComponent', () => {
         CourseListComponent,
         HostCourseListComponent,
         MockCourseListItemComponent,
-        MockOrderByCreationDatePipe,
-        MockFilterByTitlePipe,
       ]
     })
       .compileComponents();
@@ -75,16 +57,5 @@ describe('CourseListComponent', () => {
     const courseComponent = courseDebugEl.componentInstance;
 
     expect(courseComponent.course).toEqual(course1);
-  });
-
-  it('should handle delete course event', () => {
-    const courseDebugEl = hostFixture.debugElement.query(By.directive(MockCourseListItemComponent));
-    const courseComponent = courseDebugEl.componentInstance;
-    const courseId = 'some_id';
-    const onDeleteSpy = spyOn(hostComponent, 'onDelete');
-
-    courseComponent.deleteCourse.emit(courseId);
-
-    expect(onDeleteSpy).toHaveBeenCalledWith(courseId);
   });
 });

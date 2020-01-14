@@ -1,12 +1,23 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, Component, Input, Output, EventEmitter } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { SearchComponent } from './search.component';
 
 describe('SearchComponent', () => {
-  let component: SearchComponent;
-  let fixture: ComponentFixture<SearchComponent>;
+  let hostComponent: HostSearchComponent;
+  let hostFixture: ComponentFixture<HostSearchComponent>;
+
+  @Component({
+    template: `
+      <app-search
+        (searchTextChange)="onSearchTextChange($event)"
+      ></app-search>
+    `
+  })
+  class HostSearchComponent {
+    onSearchTextChange() {}
+  }
 
   @Component({
     selector: 'app-input',
@@ -21,53 +32,45 @@ describe('SearchComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [SearchComponent, MockInputComponent]
+      declarations: [
+        SearchComponent,
+        HostSearchComponent,
+        MockInputComponent,
+      ]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SearchComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    hostFixture = TestBed.createComponent(HostSearchComponent);
+    hostComponent = hostFixture.componentInstance;
+    hostFixture.detectChanges();
   });
 
   it('should set input placeholder', () => {
-    const inputDebugEl = fixture.debugElement.query(By.directive(MockInputComponent));
+    const inputDebugEl = hostFixture.debugElement.query(By.directive(MockInputComponent));
     const inputComponent = inputDebugEl.componentInstance;
 
     expect(inputComponent.placeholder).toBe('Text to search');
   });
 
   it('should set input icon', () => {
-    const inputDebugEl = fixture.debugElement.query(By.directive(MockInputComponent));
+    const inputDebugEl = hostFixture.debugElement.query(By.directive(MockInputComponent));
     const inputComponent = inputDebugEl.componentInstance;
 
     expect(inputComponent.iconPath).toBe('assets/img/search.png');
   });
 
-  it('should set search button name', () => {
-    const buttonEl = fixture.debugElement.query(By.css('app-button')).nativeElement;
-
-    expect(buttonEl.name).toBe('Search');
-  });
-
-  it('should set search button font size', () => {
-    const buttonEl = fixture.debugElement.query(By.css('app-button')).nativeElement;
-
-    expect(buttonEl.fontSize).toBe('18px');
-  });
-
-  it('should log search text on search button click', () => {
-    const inputDebugEl = fixture.debugElement.query(By.directive(MockInputComponent));
+  it('should emit search text change', fakeAsync(() => {
+    const inputDebugEl = hostFixture.debugElement.query(By.directive(MockInputComponent));
     const inputComponent = inputDebugEl.componentInstance;
-    const buttonEl = fixture.debugElement.query(By.css('app-button')).nativeElement;
     const searchText = 'some_text';
-    const consoleLogSpy = spyOn(console, 'log');
+    const searchTextChangeSpy = spyOn(hostComponent, 'onSearchTextChange');
 
     inputComponent.valueChange.emit(searchText);
-    buttonEl.dispatchEvent(new Event('click'));
 
-    expect(consoleLogSpy).toHaveBeenCalledWith(`Search should be done for the text [${searchText}]`);
-  });
+    tick(500);
+
+    expect(searchTextChangeSpy).toHaveBeenCalledWith(searchText);
+  }));
 });

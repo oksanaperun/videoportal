@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 875px;
+}
+
+app-header,
+app-footer {
+  height: 64px;
+}
+
+.error-info-box {
+  flex: 1;
+  text-align: center;
+
+  .error-code {
+    font-size: 72px;
+    margin-bottom: 24px;
+  }
+
+  .error-message {
+    font-size: 18px;
+  }
+}

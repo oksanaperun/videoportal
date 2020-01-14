@@ -1,15 +1,28 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, Component, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
+import { Store } from '@ngrx/store';
+import { of } from 'rxjs';
 
+import { INCREMENT_CURRENT_PAGE } from 'src/app/core/store/courses-store';
 import { CoursesComponent } from './courses.component';
-import * as FakeDataImport from 'src/app/fake-data';
+import { SearchComponent } from 'src/app/shared/controls/search/search.component';
 
 describe('CoursesComponent', () => {
   let component: CoursesComponent;
   let fixture: ComponentFixture<CoursesComponent>;
 
-  const courses = [{ a: 123 }];
+  let mockRouter;
+  let mockStore;
+
+  const courses = [
+    { id: 'a', title: 'Title A' },
+    { id: 'b', title: 'Title B' },
+    { id: 'c', title: 'Title C' },
+    { id: 'd', title: 'Title D' },
+    { id: 'e', title: 'Title E' }
+  ];
 
   @Component({
     selector: 'app-course-list',
@@ -20,13 +33,43 @@ describe('CoursesComponent', () => {
     @Output() deleteCourse = new EventEmitter<string>();
   }
 
-  beforeEach(async(() => {
-    spyOnProperty(FakeDataImport, 'courses')
-      .and.returnValue(courses);
+  @Component({
+    selector: 'app-search',
+    template: '',
+    providers: [{ provide: SearchComponent, useClass: MockSearchComponent }]
+  })
+  class MockSearchComponent {
+    getSearchTextChange() {
+      return of('');
+    }
+  }
 
+  beforeEach(() => {
+    mockRouter = {
+      navigate: jasmine.createSpy()
+    };
+
+    mockStore = {
+      dispatch: jasmine.createSpy(),
+      select: jasmine.createSpy().and.returnValue(of({
+        items: courses,
+        searchText: '',
+      })),
+    };
+  });
+
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [CoursesComponent, MockCourseListComponent]
+      declarations: [
+        CoursesComponent,
+        MockCourseListComponent,
+        MockSearchComponent,
+      ],
+      providers: [
+        { provide: Router, useValue: mockRouter },
+        { provide: Store, useValue: mockStore },
+      ]
     })
       .compileComponents();
   }));
@@ -37,23 +80,16 @@ describe('CoursesComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should set courses list', () => {
-    const courseListDebugEl = fixture.debugElement.query(By.directive(MockCourseListComponent));
-    const courseListComponent = courseListDebugEl.componentInstance;
+  it('should set courses list', async(() => {
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
 
-    expect(courseListComponent.courses).toEqual(courses);
-  });
+      const courseListDebugEl = fixture.debugElement.query(By.directive(MockCourseListComponent));
+      const courseListComponent = courseListDebugEl.componentInstance;
 
-  it('should handle delete course event', () => {
-    const courseListDebugEl = fixture.debugElement.query(By.directive(MockCourseListComponent));
-    const courseListComponent = courseListDebugEl.componentInstance;
-    const courseId = 'some_id';
-    const consoleLogSpy = spyOn(console, 'log');
-
-    courseListComponent.deleteCourse.emit(courseId);
-
-    expect(consoleLogSpy).toHaveBeenCalledWith(`Course with id [${courseId}] should be deleted.`);
-  });
+      expect(courseListComponent.courses).toEqual(courses);
+    });
+  }));
 
   it('should set add button name', () => {
     const addButtonEl = fixture.debugElement.query(By.css('app-button')).nativeElement;
@@ -67,12 +103,25 @@ describe('CoursesComponent', () => {
     expect(addButtonEl.iconPath).toBe('assets/img/plus.png');
   });
 
-  it('should handle load more click event', () => {
-    const loadMoreEl = fixture.debugElement.query(By.css('.load-more')).nativeElement;
-    const consoleLogSpy = spyOn(console, 'log');
+  it('should navigate to new course after add button click', () => {
+    const addButtonEl = fixture.debugElement.query(By.css('app-button')).nativeElement;
 
-    loadMoreEl.dispatchEvent(new Event('click'));
+    addButtonEl.dispatchEvent(new Event('click'));
 
-    expect(consoleLogSpy).toHaveBeenCalledWith('Load more is clicked.');
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['courses', 'new']);
   });
+
+  it('should increment current page number on load more click event', async(() => {
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+
+      const loadMoreEl = fixture.debugElement.query(By.css('.load-more-box span')).nativeElement;
+
+      loadMoreEl.dispatchEvent(new Event('click'));
+
+      const storeAction = mockStore.dispatch.calls.mostRecent().args[0];
+
+      expect(storeAction.type).toBe(INCREMENT_CURRENT_PAGE);
+    });
+  }));
 });

@@ -1,13 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, Pipe, PipeTransform, Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { of } from 'rxjs';
 
-import { CourseListItemComponent } from './course-list-item.component';
 import { Course } from 'src/app/core/entities';
+import { DialogService } from 'src/app/core/services/dialog.service';
+import { CourseListItemComponent } from './course-list-item.component';
 
 describe('CourseListItemComponent', () => {
   let hostComponent: HostCourseListItemComponent;
   let hostFixture: ComponentFixture<HostCourseListItemComponent>;
+
+  let mockRouter;
+  let mockDialogService;
+  let mockStore;
 
   const id = 'some_id';
   const title = 'some_title';
@@ -23,12 +31,29 @@ describe('CourseListItemComponent', () => {
   }
 
   @Component({
-    template: '<app-course-list-item [course]="course" (deleteCourse)="onDelete($event)"></app-course-list-item>'
+    template: `
+      <app-course-list-item
+        [course]="course"
+      ></app-course-list-item>
+    `
   })
   class HostCourseListItemComponent {
     course: Course;
-    onDelete() { }
   }
+
+  beforeEach(() => {
+    mockRouter = {
+      navigate: jasmine.createSpy()
+    };
+
+    mockDialogService = {
+      openModal: () => of(null),
+    };
+
+    mockStore = {
+      dispatch: jasmine.createSpy(),
+    };
+  });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -37,6 +62,11 @@ describe('CourseListItemComponent', () => {
         CourseListItemComponent,
         HostCourseListItemComponent,
         MockTimeInMinutesPipe,
+      ],
+      providers: [
+        { provide: Router, useValue: mockRouter },
+        { provide: DialogService, useValue: mockDialogService },
+        { provide: Store, useValue: mockStore },
       ]
     })
       .compileComponents();
@@ -127,14 +157,6 @@ describe('CourseListItemComponent', () => {
     it('should have a font size', () => {
       expect(editButtonEl.fontSize).toBe('12px');
     });
-
-    it('should log click event', () => {
-      const consoleLogSpy = spyOn(console, 'log');
-
-      editButtonEl.dispatchEvent(new Event('click'));
-
-      expect(consoleLogSpy).toHaveBeenCalledWith('Edit button is clicked.');
-    });
   });
 
   describe('delete button', () => {
@@ -154,14 +176,6 @@ describe('CourseListItemComponent', () => {
 
     it('should have a font size', () => {
       expect(deleteButtonEl.fontSize).toBe('12px');
-    });
-
-    it('should notify about click event', () => {
-      const onDeleteSpy = spyOn(hostComponent, 'onDelete');
-
-      deleteButtonEl.dispatchEvent(new Event('click'));
-
-      expect(onDeleteSpy).toHaveBeenCalledWith(id);
     });
   });
 });

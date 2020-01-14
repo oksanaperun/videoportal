@@ -1,0 +1,27 @@
+:host {
+  display: flex;
+  background-color: #414452;
+}
+
+.logo-box {
+  padding-left: 85px;
+
+  app-logo {
+    cursor: pointer;
+  }
+}
+
+.user-box {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  padding-right: 33px;
+
+  app-button {
+    height: 20px;
+  }
+
+  .user-name {
+    margin-right: 13px;
+  }
+}

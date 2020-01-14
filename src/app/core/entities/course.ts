@@ -1,9 +1,13 @@
-export interface Course {
-  id: string;
-  title: string;
-  creationDate: number;
-  duration: number;
-  description: string;
-  authors: string[];
-  topRated?: boolean;
+import { Author } from './author';
+
+export class Course {
+  constructor(
+    public id: string,
+    public title: string,
+    public creationDate: number,
+    public duration: number,
+    public description: string,
+    public authors: Author[],
+    public topRated?: boolean
+  ) { }
 }

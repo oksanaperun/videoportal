@@ -1,0 +1,6 @@
+<input
+  placeholder="{{placeholder}}"
+  [value]="value || ''"
+  (keypress)="isInteger($event)"
+  (input)="onInput($event)"
+/>

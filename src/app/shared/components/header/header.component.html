@@ -1,0 +1,17 @@
+<div class="logo-box">
+  <app-logo (click)="onLogoClick()"></app-logo>
+</div>
+
+<div *ngIf="userName$ | async as userName" class="user-box">
+  <app-button
+    class="user-name"
+    [name]="userName"
+    [iconPath]="'assets/img/user.png'"
+  ></app-button>
+
+  <app-button
+    [name]="'Logout'"
+    [iconPath]="'assets/img/exit.png'"
+    (click)="onLogoutClick()"
+  ></app-button>
+</div>
