@@ -1,6 +1,7 @@
 export * from './author';
 export * from './breadcrumbRoute';
 export * from './course';
+export * from './coursesData';
 export * from './loginResponse';
 export * from './selectOption';
 export * from './sortDirection';

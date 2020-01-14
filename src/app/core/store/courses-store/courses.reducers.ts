@@ -8,6 +8,7 @@ import { CoursesState } from '../models/courses-state';
 
 export const initialState: CoursesState = {
   items: [],
+  totalCount: 0,
   searchText: '',
   currentPage: 1,
 };
@@ -17,9 +18,10 @@ export const coursesReducers = (state = initialState, action: CoursesActionTypes
     case LOAD_COURSES_SUCCESS:
       return {
         ...state,
+        totalCount: action.payload.totalCount,
         items: state.currentPage > 1
-          ? [...state.items, ...action.payload]
-          : action.payload,
+          ? [...state.items, ...action.payload.courses]
+          : action.payload.courses,
       };
     case CHANGE_SEARCH_TEXT:
       return {

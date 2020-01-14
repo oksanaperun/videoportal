@@ -14,7 +14,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class InputComponent implements ControlValueAccessor {
   @Input() placeholder?: string;
   @Input() iconPath?: string;
-  @Input() inputHeight?: string;
   @Input() type?: string;
   @Input() invalid?: boolean;
 
@@ -24,7 +23,6 @@ export class InputComponent implements ControlValueAccessor {
     return {
       width: `calc(100% - ${this.iconPath ? '56' : '24'}px)`,
       padding: `6px 12px 6px ${this.iconPath ? '42' : '12'}px`,
-      height: this.inputHeight || '22px',
     };
   }
 

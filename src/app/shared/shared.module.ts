@@ -15,6 +15,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 
 import { ButtonComponent } from './controls/button/button.component';
 import { DatepickerComponent } from './controls/datepicker/datepicker.component';
+import { FormControlErrorComponent } from './controls/form-control-error/form-control-error.component';
 import { InputComponent } from './controls/input/input.component';
 import { IntegerInputComponent } from './controls/integer-input/integer-input.component';
 import { LogoComponent } from './controls/logo/logo.component';
@@ -36,6 +37,7 @@ const items = [
     PageNotFoundComponent,
     ButtonComponent,
     DatepickerComponent,
+    FormControlErrorComponent,
     InputComponent,
     IntegerInputComponent,
     LogoComponent,

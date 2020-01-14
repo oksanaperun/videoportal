@@ -3,9 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Course } from '../../entities';
+import { Course, CoursesData } from '../../entities';
 import { CourseDto } from './dtos/course.dto';
-import { CourseGetListActionModel } from './models/course-get-list-action.model';
+import { CoursesDataDto } from './dtos/courses-data.dto';
+import { GetCoursesActionModel } from './models/course-get-list-action.model';
 
 @Injectable()
 export class CourseService {
@@ -13,11 +14,14 @@ export class CourseService {
     private http: HttpClient,
   ) { }
 
-  getList(model: CourseGetListActionModel): Observable<Course[]> {
+  getCourses(model: GetCoursesActionModel): Observable<CoursesData> {
     const params = model.toParams();
 
-    return this.http.get<CourseDto[]>('courses', { params }).pipe(
-      map((response: CourseDto[]) => this.mapCourseDtos(response))
+    return this.http.get<CoursesDataDto>('courses', { params }).pipe(
+      map(({ courses, totalCount }: CoursesDataDto) => ({
+        courses: this.mapCourseDtos(courses),
+        totalCount
+      }))
     );
   }
 

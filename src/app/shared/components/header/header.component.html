@@ -5,13 +5,13 @@
 <div *ngIf="userName$ | async as userName" class="user-box">
   <app-button
     class="user-name"
+    iconPath="assets/img/user.png"
     [name]="userName"
-    [iconPath]="'assets/img/user.png'"
   ></app-button>
 
   <app-button
-    [name]="'Logout'"
-    [iconPath]="'assets/img/exit.png'"
+    name="Logout"
+    iconPath="assets/img/exit.png"
     (click)="onLogoutClick()"
   ></app-button>
 </div>

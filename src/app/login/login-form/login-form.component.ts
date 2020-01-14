@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -14,19 +14,18 @@ import { LoginAction, getLoginError } from 'src/app/core/store/auth-store';
 export class LoginFormComponent implements OnInit {
   errorMessage$: Observable<string>;
 
-  loginForm = new FormGroup({
-    userLogin: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
+  loginForm = this.formBuilder.group({
+    userLogin: ['', Validators.required],
+    password: ['', Validators.required],
   });
 
-  constructor(private store: Store<AppState>) { }
+  constructor(
+    private store: Store<AppState>,
+    private formBuilder: FormBuilder,
+  ) { }
 
   ngOnInit() {
     this.errorMessage$ = this.store.select(getLoginError);
-  }
-
-  getLoginButtonColor(): string {
-    return this.loginForm.valid ? '#ffffff' : '#a8a9b4';
   }
 
   onSubmit() {
@@ -36,5 +35,11 @@ export class LoginFormComponent implements OnInit {
     };
 
     this.store.dispatch(new LoginAction(loginData));
+  }
+
+  isControlValid(controlName: string): boolean {
+    const control = this.loginForm.controls[controlName];
+
+    return !control.dirty || control.valid;
   }
 }

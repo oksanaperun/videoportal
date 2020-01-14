@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Observable, iif, of } from 'rxjs';
-import { tap, map, mergeMap } from 'rxjs/operators';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { tap, map, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { AppState } from 'src/app/core/store/models/app-state';
@@ -23,12 +23,12 @@ export class CourseComponent implements OnInit {
 
   authorOptions$: Observable<SelectOption[]>;
 
-  courseForm = new FormGroup({
-    title: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-    description: new FormControl('', [Validators.required, Validators.maxLength(500)]),
-    duration: new FormControl(0, [Validators.required, Validators.min(1)]),
-    date: new FormControl(null, Validators.required),
-    authors: new FormControl([], Validators.required),
+  courseForm = this.formBuilder.group({
+    title: ['', [Validators.required, Validators.maxLength(50)]],
+    description: ['', [Validators.required, Validators.maxLength(500)]],
+    duration: [null, [Validators.required, Validators.min(1)]],
+    date: [null, Validators.required],
+    authors: [[], Validators.required],
   });
 
   private courseId: string;
@@ -41,36 +41,22 @@ export class CourseComponent implements OnInit {
     private coursesService: CourseService,
     private store: Store<AppState>,
     private authorService: AuthorService,
+    private formBuilder: FormBuilder,
   ) { }
 
   ngOnInit() {
-    this.getCourse();
+    this.setCourse();
     this.getAuthors();
   }
 
   onSubmit() {
-    const { title, description, duration, date, authors } = this.courseForm.value;
-    const newCourse = new Course(
-      this.courseId || null,
-      title,
-      date,
-      duration,
-      description,
-      this.mapSelectOptionsToAuthors(authors),
-      this.isCourseTopRated,
-    );
-
     this.courseId
-      ? this.updateCourse(newCourse)
-      : this.createCourse(newCourse);
+      ? this.updateCourse()
+      : this.createCourse();
   }
 
   onCancelButtonClick() {
     this.router.navigate(['courses']);
-  }
-
-  getSubmitButtonColor(): string {
-    return this.courseForm.valid ? '#ffffff' : '#a8a9b4';
   }
 
   isControlValid(controlName: string): boolean {
@@ -79,72 +65,49 @@ export class CourseComponent implements OnInit {
     return !control.dirty || control.valid;
   }
 
-  isControlRequiredError(controlName: string): boolean {
-    const control = this.courseForm.controls[controlName];
+  private setCourse() {
+    const routeId = this.route.snapshot.params.id;
 
-    return control.dirty && control.errors && control.errors.required;
-  }
-
-  isControlMaxLengthError(controlName: string): boolean {
-    const control = this.courseForm.controls[controlName];
-
-    return control.dirty && control.errors && control.errors.maxlength;
-  }
-
-  isControlMinError(controlName: string): boolean {
-    const control = this.courseForm.controls[controlName];
-
-    return control.dirty && control.errors && control.errors.min;
-  }
-
-  private getCourse() {
-    this.route.paramMap.pipe(
-      map((params: ParamMap) => params.get('id')),
-      mergeMap((id: string) => iif(() => id === 'new', this.handleNewCourse(), this.handleEditCourse(id))),
-    ).subscribe((course?: Course) => {
-      if (course) {
-        this.setCourseData(course);
-      }
-    });
+    routeId === 'new'
+      ? this.setDataOnNewCourse()
+      : this.getCourseData(routeId);
   }
 
   private getAuthors() {
     this.authorOptions$ = this.authorService.get().pipe(
       tap((authors: AuthorDto[]) => { this.authorsSourceData = authors; }),
       map((authors: AuthorDto[]) => this.mapAuthorsToSelectOptions(authors)),
-      map((options: SelectOption[]) => options.sort(this.sortAuthorOptions)),
+      map((options: SelectOption[]) => options.sort(sortAuthorOptions)),
     );
   }
 
-  private handleNewCourse(): Observable<any> {
-    return of(null).pipe(
-      tap(() => {
-        this.formTitle = 'New course';
+  private setDataOnNewCourse() {
+    this.formTitle = 'New course';
 
-        this.store.dispatch(new SetChildRoute({
-          path: ['courses', 'new'],
-          title: 'New course'
-        }));
-      })
-    );
+    this.store.dispatch(new SetChildRoute({
+      path: ['courses', 'new'],
+      title: 'New course'
+    }));
   }
 
-  private handleEditCourse(id: string): Observable<Course> {
-    return this.coursesService.get(id).pipe(
-      tap((course: Course) => {
-        if (course) {
-          this.formTitle = course.title;
-          this.setCourseData(course);
+  private setDataOnExistingCourse(course: Course) {
+    this.formTitle = course.title;
+    this.setCourseData(course);
 
-          this.store.dispatch(new SetChildRoute({
-            path: ['courses', course.id],
-            title: course.title
-          }));
-        } else {
-          this.router.navigate(['404']);
-        }
-      })
-    );
+    this.store.dispatch(new SetChildRoute({
+      path: ['courses', course.id],
+      title: course.title
+    }));
+  }
+
+  private getCourseData(id: string) {
+    this.coursesService.get(id).pipe(
+      tap((course: Course) => { this.setDataOnExistingCourse(course); }),
+      catchError(() => {
+        this.router.navigate(['404']);
+        return of();
+      }),
+    ).subscribe();
   }
 
   private setCourseData(course: Course) {
@@ -175,15 +138,33 @@ export class CourseComponent implements OnInit {
     });
   }
 
-  private sortAuthorOptions(option1: SelectOption, option2: SelectOption): number {
-    return option1.label < option2.label ? -1 : (option1.label > option2.label ? 1 : 0);
-  }
+  private createCourse() {
+    const course = this.getCourse();
 
-  private createCourse(course: Course) {
     this.store.dispatch(new AddCourseAction(course));
   }
 
-  private updateCourse(course: Course) {
+  private updateCourse() {
+    const course = this.getCourse();
+
     this.store.dispatch(new EditCourseAction(course));
   }
+
+  private getCourse(): Course {
+    const { title, description, duration, date, authors } = this.courseForm.value;
+
+    return new Course(
+      this.courseId || null,
+      title,
+      date,
+      duration,
+      description,
+      this.mapSelectOptionsToAuthors(authors),
+      this.isCourseTopRated,
+    );
+  }
+}
+
+function sortAuthorOptions(option1: SelectOption, option2: SelectOption): number {
+  return option1.label < option2.label ? -1 : (option1.label > option2.label ? 1 : 0);
 }

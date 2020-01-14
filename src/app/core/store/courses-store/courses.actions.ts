@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { Course } from 'src/app/core/entities';
+import { Course, CoursesData } from 'src/app/core/entities';
 
 export const LOAD_COURSES = '[Courses] Load';
 export const LOAD_COURSES_SUCCESS = '[Courses] Loaded courses successfully';
@@ -18,7 +18,7 @@ export class LoadCoursesAction implements Action {
 
 export class LoadCoursesSuccessAction implements Action {
   readonly type = LOAD_COURSES_SUCCESS;
-  constructor(public payload: Course[]) { }
+  constructor(public payload: CoursesData) { }
 }
 
 export class ChangeSearchTextAction implements Action {

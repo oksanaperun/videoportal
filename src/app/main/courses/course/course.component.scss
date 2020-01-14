@@ -28,11 +28,6 @@
     font-weight: 600;
     color: #2c2f3c;
   }
-
-  .error-message {
-    font-size: 12px;
-    color: #ff4e33;
-  }
 }
 
 .fields-box {
@@ -72,11 +67,6 @@
         color: #6c7283;
       }
     }
-
-    .control-error {
-      font-size: 12px;
-      color: #ff4e33;
-    }
   }
 
   .duration-box {
@@ -114,6 +104,10 @@
     margin-left: auto;
     width: 76px;
     background-color: #d9dbe3;
+
+    ::ng-deep button {
+      color: #5b616f;
+    }
   }
 
   .save-button {
@@ -123,6 +117,10 @@
 
     &.disabled {
       background-color: #d9dbe3;
+
+      ::ng-deep button {
+        color: #a8a9b4;
+      }
     }
   }
 }

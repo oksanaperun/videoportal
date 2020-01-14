@@ -28,6 +28,10 @@
     .duration {
       margin-right: 4px;
     }
+
+    app-button ::ng-deep button {
+      color: #b9bdce;
+    }
   }
 
   .description {
@@ -40,7 +44,7 @@
 .actions {
   width: 261px;
 
-  .buttons {
+  .buttons-box {
     display: flex;
     align-items: center;
     height: 100%;
@@ -62,4 +66,8 @@
       width: 86px;
     }
   }
+}
+
+app-button ::ng-deep button {
+  font-size: 12px;
 }

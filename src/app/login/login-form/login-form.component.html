@@ -2,7 +2,12 @@
 
   <div class="header-box">
     <span class="base-font title">Login</span>
-    <span *ngIf="errorMessage$ | async as errorMessage" class="base-font error-message">{{errorMessage}}</span>
+
+    <span
+      *ngIf="errorMessage$ | async as errorMessage"
+      class="base-font error-message">
+      {{errorMessage}}
+    </span>
   </div>
 
   <div class="user-login-box">
@@ -13,8 +18,15 @@
 
     <app-input
       formControlName="userLogin"
-      [placeholder]="'Enter e-mail'"
+      placeholder="Enter e-mail"
+      [invalid]="!isControlValid('userLogin')"
     ></app-input>
+
+    <app-form-control-error
+      controlName="userLogin"
+      errorName="required"
+      [form]="loginForm"
+    ></app-form-control-error>
   </div>
 
   <div class="user-password-box">
@@ -25,9 +37,16 @@
 
     <app-input
       formControlName="password"
-      [placeholder]="'Enter password'"
-      [type]="'password'"
+      placeholder="Enter password"
+      type="password"
+      [invalid]="!isControlValid('password')"
     ></app-input>
+
+    <app-form-control-error
+      controlName="password"
+      errorName="required"
+      [form]="loginForm"
+    ></app-form-control-error>
   </div>
 
   <div class="footer-box">
@@ -36,9 +55,8 @@
     <app-button
       type="submit"
       class="login-button"
+      name="Login"
       [class.disabled]="!loginForm.valid"
-      [name]="'Login'"
-      [textColor]="getLoginButtonColor()"
       [disabled]="!loginForm.valid"
     ></app-button>
   </div>

@@ -13,16 +13,22 @@
       
         <app-input
           formControlName="title"
+          placeholder="Add title"
           [invalid]="!isControlValid('title')"
-          [placeholder]="'Add title'"
         ></app-input>
 
-        <span *ngIf="isControlRequiredError('title')" class="base-font control-error">
-          This field is required
-        </span>
-        <span *ngIf="isControlMaxLengthError('title')" class="base-font control-error">
-          Max allowed length of this field is 50 symbols
-        </span>
+        <app-form-control-error
+          controlName="title"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
+
+        <app-form-control-error
+          controlName="title"
+          errorName="maxlength"
+          errorCondition="50"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
       
       <div class="description-box">
@@ -33,16 +39,22 @@
       
         <app-textarea
           formControlName="description"
+          placeholder="Add description"
           [invalid]="!isControlValid('description')"
-          [placeholder]="'Add description'"
         ></app-textarea>
 
-        <span *ngIf="isControlRequiredError('description')" class="base-font control-error">
-          This field is required
-        </span>
-        <span *ngIf="isControlMaxLengthError('description')" class="base-font control-error">
-          Max allowed length of this field is 500 symbols
-        </span>
+        <app-form-control-error
+          controlName="description"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
+
+        <app-form-control-error
+          controlName="description"
+          errorName="maxlength"
+          errorCondition="500"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
       
       <div class="duration-box">
@@ -55,19 +67,27 @@
           <app-integer-input
             class="duration-input"
             formControlName="duration"
+            placeholder="minutes"
             [invalid]="!isControlValid('duration')"
-            [placeholder]="'minutes'"
           ></app-integer-input>
         
-          <span class="base-font duration-info">{{courseForm.controls.duration.value | timeInMinutes}}</span>
+          <span class="base-font duration-info">
+            {{courseForm.controls.duration.value | timeInMinutes}}
+          </span>
         </div>
 
-        <span *ngIf="isControlRequiredError('duration')" class="base-font control-error">
-          This field is required
-        </span>
-        <span *ngIf="isControlMinError('duration')" class="base-font control-error">
-          This field value should be greater or equal to 1
-        </span>
+        <app-form-control-error
+          controlName="duration"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
+
+        <app-form-control-error
+          controlName="duration"
+          errorName="min"
+          errorCondition="1"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
       
       <div class="date-box">
@@ -78,13 +98,15 @@
 
         <app-datepicker
           formControlName="date"
+          placeholder="d MMM, yyyy"
           [invalid]="!isControlValid('date')"
-          [placeholder]="'d MMM, yyyy'"
         ></app-datepicker>
 
-        <span *ngIf="isControlRequiredError('date')" class="base-font control-error">
-          This field is required
-        </span>
+        <app-form-control-error
+          controlName="date"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
       
       <div class="authors-box">
@@ -95,32 +117,32 @@
 
         <app-multi-select-dropdown 
           formControlName="authors"
-          [placeholder]="'Start typing'"
+          placeholder="Start typing"
           [invalid]="!isControlValid('authors')"
           [options]="authorOptions$ | async"
         ></app-multi-select-dropdown>
 
-        <span *ngIf="isControlRequiredError('authors')" class="base-font control-error">
-          This field is required
-        </span>
+        <app-form-control-error
+          controlName="authors"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
     </div>
 
     <div class="footer-box">
       <app-button
         class="cancel-button"
-        [name]="'Cancel'"
-        [textColor]="'#5b616f'"
+        name="Cancel"
         (click)="onCancelButtonClick()"
       ></app-button>
 
       <app-button
         type="submit"
         class="save-button"
+        name="Save"
         [class.disabled]="!courseForm.valid"
-        [name]="'Save'"
         [disabled]="!courseForm.valid"
-        [textColor]="getSubmitButtonColor()"
       ></app-button>
     </div>
   </form>
