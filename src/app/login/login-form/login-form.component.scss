@@ -65,6 +65,10 @@
 
     &.disabled {
       background-color: #d9dbe3;
+
+      ::ng-deep button {
+        color: #a8a9b4;
+      }
     }
   }
 }

@@ -1,0 +1,25 @@
+<div class="app-multi-select-dropdown" [class.invalid]="invalid">
+  <div class="selected-option-box" *ngFor="let selectedOption of selectedOptions; index as i;">
+    <span class="base-font">
+      {{selectedOption.label}}
+    </span>
+
+    <img class="remove" src="assets/img/cross.png" (click)="onOptionDeselected(i)">
+  </div>
+
+  <input #filterInput
+    matInput
+    class="filter-input"
+    [matAutocomplete]="auto"
+    [placeholder]="getFilterInputPlaceholder()"
+    (input)="onFilterInput($event)">
+  <mat-autocomplete 
+    #auto="matAutocomplete"
+    (optionSelected)="onOptionSelected($event)">
+    <mat-option *ngFor="let option of getAvailableOptions()">
+      <span>
+        {{option.label}}
+      </span>
+    </mat-option>
+  </mat-autocomplete>
+</div>

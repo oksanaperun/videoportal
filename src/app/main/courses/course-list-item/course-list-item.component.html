@@ -12,17 +12,13 @@
 
       <app-button
         class="duration"
+        iconPath="assets/img/clock.png"
         [name]="course?.duration | timeInMinutes"
-        [iconPath]="'assets/img/clock.png'"
-        [fontSize]="'12px'"
-        [textColor]="'#b9bdce'"
       ></app-button>
 
       <app-button
+        iconPath="assets/img/calendar.png"
         [name]="course?.creationDate | date:'d MMM, yyyy'"
-        [iconPath]="'assets/img/calendar.png'"
-        [fontSize]="'12px'"
-        [textColor]="'#b9bdce'"
       ></app-button>
     </div>
 
@@ -30,20 +26,18 @@
   </div>
 
   <div class="actions">
-    <div class="buttons">
+    <div class="buttons-box">
       <app-button
         class="edit"
-        [name]="'Edit'"
-        [iconPath]="'assets/img/pencil.png'"
-        [fontSize]="'12px'"
+        name="Edit"
+        iconPath="assets/img/pencil.png"
         (click)="onEditButtonClick()"
       ></app-button>
 
       <app-button
         class="delete"
-        [name]="'Delete'"
-        [iconPath]="'assets/img/trash.png'"
-        [fontSize]="'12px'"
+        name="Delete"
+        iconPath="assets/img/trash.png"
         (click)="onDeleteButtonClick()"
       ></app-button>
     </div>

@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 
 import { CourseDto } from './dtos/course.dto';
 import { Course, Author } from '../../entities';
-import { CourseGetListActionModel } from './models/course-get-list-action.model';
+import { GetCoursesActionModel } from './models/course-get-list-action.model';
 import { CourseService } from './course.service';
 
 describe('CourseService', () => {
@@ -84,7 +84,7 @@ describe('CourseService', () => {
       false,
     );
 
-    sut.getList(new CourseGetListActionModel()).subscribe((response) => {
+    sut.getCourses(new GetCoursesActionModel()).subscribe((response) => {
       expect(response).toEqual([course1, course2]);
     });
 

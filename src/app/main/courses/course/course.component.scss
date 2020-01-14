@@ -8,7 +8,7 @@
   align-items: center;
   padding: 24px;
 
-  .form-box {
+  form {
     margin: 0 auto;
     padding: 24px;
     background-color: #ffffff;
@@ -27,11 +27,6 @@
     font-size: 24px;
     font-weight: 600;
     color: #2c2f3c;
-  }
-
-  .error-message {
-    font-size: 12px;
-    color: #ff4e33;
   }
 }
 
@@ -109,11 +104,23 @@
     margin-left: auto;
     width: 76px;
     background-color: #d9dbe3;
+
+    ::ng-deep button {
+      color: #5b616f;
+    }
   }
 
   .save-button {
     width: 64px;
     margin-left: 12px;
     background-color: #9bc837;
+
+    &.disabled {
+      background-color: #d9dbe3;
+
+      ::ng-deep button {
+        color: #a8a9b4;
+      }
+    }
   }
 }

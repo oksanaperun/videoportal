@@ -1,14 +1,21 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-integer-input',
   templateUrl: './integer-input.component.html',
-  styleUrls: ['./integer-input.component.scss']
+  styleUrls: ['./integer-input.component.scss'],
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => IntegerInputComponent),
+    multi: true
+  }]
 })
-export class IntegerInputComponent {
+export class IntegerInputComponent implements ControlValueAccessor {
   @Input() placeholder?: string;
-  @Input() value?: number;
-  @Output() valueChange = new EventEmitter<string>();
+  @Input() invalid?: boolean;
+
+  value: number;
 
   isInteger(event: KeyboardEvent) {
     const isValid = /\d/.test(event.key);
@@ -19,6 +26,20 @@ export class IntegerInputComponent {
   }
 
   onInput(event) {
-    this.valueChange.emit(event.target.value);
+    this.propagateChange(event.target.value);
   }
+
+  writeValue(value: number) {
+    if (value !== undefined) {
+      this.value = value;
+    }
+  }
+
+  registerOnChange(fn) {
+    this.propagateChange = fn;
+  }
+
+  registerOnTouched() { }
+
+  private propagateChange = (_: number) => { };
 }

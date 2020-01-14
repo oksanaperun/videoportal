@@ -8,7 +8,6 @@ import { AppState } from 'src/app/core/store/models/app-state';
 import { Course } from 'src/app/core/entities';
 import {
   getCoursesState,
-  COURSES_PER_PAGE,
   ChangeSearchTextAction,
   IncrementCurrentPageAction
 } from 'src/app/core/store/courses-store';
@@ -25,8 +24,6 @@ export class CoursesComponent implements AfterViewInit {
   showLoadMore = true;
   noDataMessage: string;
 
-  private previousCoursesCount: number;
-
   constructor(
     private router: Router,
     private store: Store<AppState>,
@@ -34,6 +31,7 @@ export class CoursesComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.setBreadcrumbs();
+    this.setEmptySearchText();
     this.setCourses();
   }
 
@@ -60,9 +58,13 @@ export class CoursesComponent implements AfterViewInit {
     this.courses$ = this.store.select(getCoursesState).pipe(
       delay(0),
       tap((state: CoursesState) => { this.setNoDataMessage(state.items, state.searchText); }),
+      tap((state: CoursesState) => { this.handleLoadMoreDisplay(state); }),
       map((state: CoursesState) => state.items),
-      tap((courses: Course[]) => { this.handleLoadMoreDisplay(courses); }),
     );
+  }
+
+  private setEmptySearchText() {
+    this.store.dispatch(new ChangeSearchTextAction(''));
   }
 
   private setNoDataMessage(courses: Course[], searchText: string) {
@@ -71,9 +73,7 @@ export class CoursesComponent implements AfterViewInit {
       : '';
   }
 
-  private handleLoadMoreDisplay(courses: Course[]) {
-    this.showLoadMore = courses.length % COURSES_PER_PAGE === 0 &&
-      this.previousCoursesCount !== courses.length;
-    this.previousCoursesCount = courses.length;
+  private handleLoadMoreDisplay(state: CoursesState) {
+    this.showLoadMore = state.items.length < state.totalCount;
   }
 }

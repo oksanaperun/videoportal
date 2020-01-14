@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -13,39 +14,32 @@ import { LoginAction, getLoginError } from 'src/app/core/store/auth-store';
 export class LoginFormComponent implements OnInit {
   errorMessage$: Observable<string>;
 
-  private userLogin: string;
-  private password: string;
+  loginForm = this.formBuilder.group({
+    userLogin: ['', Validators.required],
+    password: ['', Validators.required],
+  });
 
-  constructor(private store: Store<AppState>) { }
+  constructor(
+    private store: Store<AppState>,
+    private formBuilder: FormBuilder,
+  ) { }
 
   ngOnInit() {
     this.errorMessage$ = this.store.select(getLoginError);
   }
 
-  isLoginEnabled(): boolean {
-    return !!this.userLogin && !!this.password;
+  onSubmit() {
+    const loginData = {
+      login: this.loginForm.value.userLogin,
+      password: this.loginForm.value.password,
+    };
+
+    this.store.dispatch(new LoginAction(loginData));
   }
 
-  getLoginButtonColor(): string {
-    return this.isLoginEnabled() ? '#ffffff' : '#a8a9b4';
-  }
+  isControlValid(controlName: string): boolean {
+    const control = this.loginForm.controls[controlName];
 
-  onUserLoginChange(userLogin: string) {
-    this.userLogin = userLogin;
-  }
-
-  onPasswordChange(password: string) {
-    this.password = password;
-  }
-
-  onLoginButtonClick() {
-    if (this.isLoginEnabled()) {
-      const loginData = {
-        login: this.userLogin,
-        password: this.password,
-      };
-
-      this.store.dispatch(new LoginAction(loginData));
-    }
+    return !control.dirty || control.valid;
   }
 }

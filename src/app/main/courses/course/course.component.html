@@ -1,8 +1,7 @@
 <div class="app-course">
-  <div class="form-box">
+  <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
     <div class="header-box">
       <span class="base-font title">{{formTitle}}</span>
-      <span *ngIf="errorMessage" class="base-font error-message">{{errorMessage}}</span>
     </div>
 
     <div class="fields-box">
@@ -13,10 +12,23 @@
         </div>
       
         <app-input
-          [placeholder]="'Add title'"
-          [value]="title"
-          (valueChange)="onTitleChange($event)"
+          formControlName="title"
+          placeholder="Add title"
+          [invalid]="!isControlValid('title')"
         ></app-input>
+
+        <app-form-control-error
+          controlName="title"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
+
+        <app-form-control-error
+          controlName="title"
+          errorName="maxlength"
+          errorCondition="50"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
       
       <div class="description-box">
@@ -26,10 +38,23 @@
         </div>
       
         <app-textarea
-          [placeholder]="'Add description'"
-          [value]="description"
-          (valueChange)="onDescriptionChange($event)"
+          formControlName="description"
+          placeholder="Add description"
+          [invalid]="!isControlValid('description')"
         ></app-textarea>
+
+        <app-form-control-error
+          controlName="description"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
+
+        <app-form-control-error
+          controlName="description"
+          errorName="maxlength"
+          errorCondition="500"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
       
       <div class="duration-box">
@@ -41,13 +66,28 @@
         <div class="duration-content-box">
           <app-integer-input
             class="duration-input"
-            [placeholder]="'minutes'"
-            [value]="duration"
-            (valueChange)="onDurationChange($event)"
+            formControlName="duration"
+            placeholder="minutes"
+            [invalid]="!isControlValid('duration')"
           ></app-integer-input>
         
-          <span class="base-font duration-info">{{duration | timeInMinutes}}</span>
+          <span class="base-font duration-info">
+            {{courseForm.controls.duration.value | timeInMinutes}}
+          </span>
         </div>
+
+        <app-form-control-error
+          controlName="duration"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
+
+        <app-form-control-error
+          controlName="duration"
+          errorName="min"
+          errorCondition="1"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
       
       <div class="date-box">
@@ -55,12 +95,18 @@
           <span class="base-font name">Date:</span>
           <span class="base-font required">*required</span>
         </div>
-      
-        <app-input
-          [placeholder]="'mm/dd/yyyy'"
-          [value]="date | date:'d MMM, yyyy'"
-          (valueChange)="onDateChange($event)"
-        ></app-input>
+
+        <app-datepicker
+          formControlName="date"
+          placeholder="d MMM, yyyy"
+          [invalid]="!isControlValid('date')"
+        ></app-datepicker>
+
+        <app-form-control-error
+          controlName="date"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
       
       <div class="authors-box">
@@ -68,28 +114,36 @@
           <span class="base-font name">Authors:</span>
           <span class="base-font required">*required</span>
         </div>
-      
-        <app-input
-          [placeholder]="'Start typing'"
-          [value]="getAuthorsString()"
-          (valueChange)="onAuthorsChange($event)"
-        ></app-input>
+
+        <app-multi-select-dropdown 
+          formControlName="authors"
+          placeholder="Start typing"
+          [invalid]="!isControlValid('authors')"
+          [options]="authorOptions$ | async"
+        ></app-multi-select-dropdown>
+
+        <app-form-control-error
+          controlName="authors"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
     </div>
 
     <div class="footer-box">
       <app-button
         class="cancel-button"
-        [name]="'Cancel'"
-        [textColor]="'#5b616f'"
+        name="Cancel"
         (click)="onCancelButtonClick()"
       ></app-button>
 
       <app-button
+        type="submit"
         class="save-button"
-        [name]="'Save'"
-        (click)="onSaveButtonClick()"
+        name="Save"
+        [class.disabled]="!courseForm.valid"
+        [disabled]="!courseForm.valid"
       ></app-button>
     </div>
-  </div>
+  </form>
 </div>

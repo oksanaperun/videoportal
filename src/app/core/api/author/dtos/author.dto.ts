@@ -1,4 +1,4 @@
-export class CourseAuthorDto {
+export class AuthorDto {
   constructor(
     public id: number,
     public name: string,

@@ -34,7 +34,7 @@ import { environment } from 'src/environments/environment';
         StoreDevtoolsModule.instrument({
             maxAge: 25,
             logOnly: environment.production,
-          }),
+        }),
     ],
     providers: [
         AuthGuard,
