@@ -1,95 +1,149 @@
 <div class="app-course">
-  <div class="form-box">
+  <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
     <div class="header-box">
       <span class="base-font title">{{formTitle}}</span>
-      <span *ngIf="errorMessage" class="base-font error-message">{{errorMessage}}</span>
     </div>
 
     <div class="fields-box">
       <div class="title-box">
         <div class="header">
-          <span class="base-font name">Title:</span>
-          <span class="base-font required">*required</span>
+          <span class="base-font name">{{ 'COURSES.COURSE_FORM.TITLE' | translate }}:</span>
+          <span class="base-font required">*{{ 'COURSES.COURSE_FORM.REQUIRED' | translate }}</span>
         </div>
       
         <app-input
-          [placeholder]="'Add title'"
-          [value]="title"
-          (valueChange)="onTitleChange($event)"
+          formControlName="title"
+          [placeholder]="'COURSES.COURSE_FORM.TITLE_PLACEHOLDER' | translate"
+          [invalid]="!isControlValid('title')"
         ></app-input>
+
+        <app-form-control-error
+          controlName="title"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
+
+        <app-form-control-error
+          controlName="title"
+          errorName="maxlength"
+          errorCondition="50"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
       
       <div class="description-box">
         <div class="header">
-          <span class="base-font name">Description:</span>
-          <span class="base-font required">*required</span>
+          <span class="base-font name">{{ 'COURSES.COURSE_FORM.DESCRIPTION' | translate }}:</span>
+          <span class="base-font required">*{{ 'COURSES.COURSE_FORM.REQUIRED' | translate }}</span>
         </div>
       
         <app-textarea
-          [placeholder]="'Add description'"
-          [value]="description"
-          (valueChange)="onDescriptionChange($event)"
+          formControlName="description"
+          [placeholder]="'COURSES.COURSE_FORM.DESCRIPTION_PLACEHOLDER' | translate"
+          [invalid]="!isControlValid('description')"
         ></app-textarea>
+
+        <app-form-control-error
+          controlName="description"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
+
+        <app-form-control-error
+          controlName="description"
+          errorName="maxlength"
+          errorCondition="500"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
       
       <div class="duration-box">
         <div class="header">
-          <span class="base-font name">Duration:</span>
-          <span class="base-font required">*required</span>
+          <span class="base-font name">{{ 'COURSES.COURSE_FORM.DURATION' | translate }}:</span>
+          <span class="base-font required">*{{ 'COURSES.COURSE_FORM.REQUIRED' | translate }}</span>
         </div>
       
         <div class="duration-content-box">
           <app-integer-input
             class="duration-input"
-            [placeholder]="'minutes'"
-            [value]="duration"
-            (valueChange)="onDurationChange($event)"
+            formControlName="duration"
+            [placeholder]="'COURSES.COURSE_FORM.DURATION_PLACEHOLDER' | translate"
+            [invalid]="!isControlValid('duration')"
           ></app-integer-input>
         
-          <span class="base-font duration-info">{{duration | timeInMinutes}}</span>
+          <span class="base-font duration-info">
+            {{courseForm.controls.duration.value | timeInMinutes | async}}
+          </span>
         </div>
+
+        <app-form-control-error
+          controlName="duration"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
+
+        <app-form-control-error
+          controlName="duration"
+          errorName="min"
+          errorCondition="1"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
       
       <div class="date-box">
         <div class="header">
-          <span class="base-font name">Date:</span>
-          <span class="base-font required">*required</span>
+          <span class="base-font name">{{ 'COURSES.COURSE_FORM.DATE' | translate }}:</span>
+          <span class="base-font required">*{{ 'COURSES.COURSE_FORM.REQUIRED' | translate }}</span>
         </div>
-      
-        <app-input
-          [placeholder]="'mm/dd/yyyy'"
-          [value]="date | date:'d MMM, yyyy'"
-          (valueChange)="onDateChange($event)"
-        ></app-input>
+
+        <app-datepicker
+          formControlName="date"
+          [placeholder]="'COURSES.COURSE_FORM.DATE_PLACEHOLDER' | translate"
+          [invalid]="!isControlValid('date')"
+        ></app-datepicker>
+
+        <app-form-control-error
+          controlName="date"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
       
       <div class="authors-box">
         <div class="header">
-          <span class="base-font name">Authors:</span>
-          <span class="base-font required">*required</span>
+          <span class="base-font name">{{ 'COURSES.COURSE_FORM.AUTHORS' | translate }}:</span>
+          <span class="base-font required">*{{ 'COURSES.COURSE_FORM.REQUIRED' | translate }}</span>
         </div>
-      
-        <app-input
-          [placeholder]="'Start typing'"
-          [value]="getAuthorsString()"
-          (valueChange)="onAuthorsChange($event)"
-        ></app-input>
+
+        <app-multi-select-dropdown 
+          formControlName="authors"
+          [placeholder]="'COURSES.COURSE_FORM.AUTHORS_PLACEHOLDER' | translate"
+          [invalid]="!isControlValid('authors')"
+          [options]="authorOptions$ | async"
+        ></app-multi-select-dropdown>
+
+        <app-form-control-error
+          controlName="authors"
+          errorName="required"
+          [form]="courseForm"
+        ></app-form-control-error>
       </div>
     </div>
 
     <div class="footer-box">
       <app-button
         class="cancel-button"
-        [name]="'Cancel'"
-        [textColor]="'#5b616f'"
+        [name]="'COURSES.COURSE_FORM.CANCEL' | translate"
         (click)="onCancelButtonClick()"
       ></app-button>
 
       <app-button
+        type="submit"
         class="save-button"
-        [name]="'Save'"
-        (click)="onSaveButtonClick()"
+        [name]="'COURSES.COURSE_FORM.SUBMIT' | translate"
+        [class.disabled]="!courseForm.valid"
+        [disabled]="!courseForm.valid"
       ></app-button>
     </div>
-  </div>
+  </form>
 </div>

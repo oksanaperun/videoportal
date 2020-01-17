@@ -2,16 +2,26 @@
   <app-logo (click)="onLogoClick()"></app-logo>
 </div>
 
-<div *ngIf="userName$ | async as userName" class="user-box">
-  <app-button
-    class="user-name"
-    [name]="userName"
-    [iconPath]="'assets/img/user.png'"
-  ></app-button>
+<div class="user-box">
+  <mat-select 
+    [value]="selectedLanguage"
+    (selectionChange)="onLanguageChange($event)">
+    <mat-option *ngFor="let lang of languages" [value]="lang.id">
+      {{lang.name}}
+    </mat-option>
+  </mat-select>
 
-  <app-button
-    [name]="'Logout'"
-    [iconPath]="'assets/img/exit.png'"
-    (click)="onLogoutClick()"
-  ></app-button>
+  <ng-container *ngIf="userName$ | async as userName">
+    <app-button
+      class="user-name"
+      iconPath="assets/img/user.png"
+      [name]="userName"
+    ></app-button>
+
+    <app-button
+      iconPath="assets/img/exit.png"
+      [name]="'HEADER.LOGOUT' | translate"
+      (click)="onLogoutClick()"
+    ></app-button>
+  </ng-container>
 </div>

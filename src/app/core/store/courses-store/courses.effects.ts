@@ -6,9 +6,9 @@ import { switchMap, tap, map, withLatestFrom } from 'rxjs/operators';
 
 import * as coursesActions from './courses.actions';
 import { CourseService } from '../../api/courses/course.service';
-import { Course } from '../../entities';
+import { Course, CoursesData } from '../../entities';
 import { AppState } from '../models/app-state';
-import { CourseGetListActionModel } from '../../api/courses/models/course-get-list-action.model';
+import { GetCoursesActionModel } from '../../api/courses/models/course-get-list-action.model';
 
 export const COURSES_PER_PAGE = 5;
 
@@ -29,10 +29,10 @@ export class CoursesEffects {
       const { searchText, currentPage } = store.courses;
       const startIndex = (currentPage - 1) * COURSES_PER_PAGE;
 
-      return new CourseGetListActionModel(startIndex, COURSES_PER_PAGE, searchText, 'date');
+      return new GetCoursesActionModel(startIndex, COURSES_PER_PAGE, searchText, 'date');
     }),
-    switchMap((model: CourseGetListActionModel) => this.courseService.getList(model)),
-    map((courses: Course[]) => new coursesActions.LoadCoursesSuccessAction(courses)),
+    switchMap((model: GetCoursesActionModel) => this.courseService.getCourses(model)),
+    map((data: CoursesData) => new coursesActions.LoadCoursesSuccessAction(data)),
   );
 
   @Effect()

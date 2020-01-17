@@ -1,41 +1,64 @@
-<div class="header-box">
-  <span class="base-font title">Login</span>
-  <span *ngIf="errorMessage$ | async as errorMessage" class="base-font error-message">{{errorMessage}}</span>
-</div>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-<div class="user-login-box">
-  <div class="header">
-    <span class="base-font name">E-mail:</span>
-    <span class="base-font required">*required</span>
+  <div class="header-box">
+    <span class="base-font title">{{ 'LOGIN.FORM.TITLE' | translate }}</span>
+
+    <span
+      *ngIf="errorMessage$ | async"
+      class="base-font error-message">
+      {{ 'LOGIN.FORM.ERROR' | translate }}
+    </span>
   </div>
 
-  <app-input
-    [placeholder]="'Enter e-mail'"
-    (valueChange)="onUserLoginChange($event)"
-  ></app-input>
-</div>
+  <div class="user-login-box">
+    <div class="header">
+      <span class="base-font name">{{ 'LOGIN.FORM.USER' | translate }}:</span>
+      <span class="base-font required">*{{ 'LOGIN.FORM.REQUIRED' | translate }}</span>
+    </div>
 
-<div class="user-password-box">
-  <div class="header">
-    <span class="base-font name">Password:</span>
-    <span class="base-font required">*required</span>
+    <app-input
+      formControlName="userLogin"
+      [placeholder]="'LOGIN.FORM.USER_PLACEHOLDER' | translate"
+      [invalid]="!isControlValid('userLogin')"
+    ></app-input>
+
+    <app-form-control-error
+      controlName="userLogin"
+      errorName="required"
+      [form]="loginForm"
+    ></app-form-control-error>
   </div>
 
-  <app-input
-    [placeholder]="'Enter password'"
-    [type]="'password'"
-    (valueChange)="onPasswordChange($event)"
-  ></app-input>
-</div>
+  <div class="user-password-box">
+    <div class="header">
+      <span class="base-font name">{{ 'LOGIN.FORM.PASSWORD' | translate }}:</span>
+      <span class="base-font required">*{{ 'LOGIN.FORM.REQUIRED' | translate }}</span>
+    </div>
 
-<div class="footer-box">
-  <span class="base-font forgot-password">Forgot password?</span>
+    <app-input
+      formControlName="password"
+      type="password"
+      [placeholder]="'LOGIN.FORM.PASSWORD_PLACEHOLDER' | translate"
+      [invalid]="!isControlValid('password')"
+    ></app-input>
 
-  <app-button
-    class="login-button"
-    [class.disabled]="!isLoginEnabled()"
-    [name]="'Login'"
-    [textColor]="getLoginButtonColor()"
-    (click)="onLoginButtonClick()"
-  ></app-button>
-</div>
+    <app-form-control-error
+      controlName="password"
+      errorName="required"
+      [form]="loginForm"
+    ></app-form-control-error>
+  </div>
+
+  <div class="footer-box">
+    <span class="base-font forgot-password">{{ 'LOGIN.FORM.FORGOT' | translate }}?</span>
+
+    <app-button
+      type="submit"
+      class="login-button"
+      [name]="'LOGIN.FORM.SUBMIT' | translate"
+      [class.disabled]="!loginForm.valid"
+      [disabled]="!loginForm.valid"
+    ></app-button>
+  </div>
+
+</form>

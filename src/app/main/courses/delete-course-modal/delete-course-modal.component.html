@@ -1,19 +1,18 @@
 <div class="body">
-  <p class="base-font">Are you sure you want to delete</p>
+  <p class="base-font">{{ 'COURSES.DELETE_MODAL.MESSAGE' | translate }}</p>
   <p class="base-font">{{courseTitle}}?</p>
 </div>
 
 <div class="actions">
   <app-button
     class="cancel-button"
-    [name]="'Cancel'"
-    [textColor]="'#a8a9b4'"
+    [name]="'COURSES.DELETE_MODAL.CANCEL' | translate"
     (click)="close()"
   ></app-button>
 
   <app-button
     class="confirm-button"
-    [name]="'Yes, delete'"
+    [name]="'COURSES.DELETE_MODAL.SUBMIT' | translate"
     (click)="save()"
   ></app-button>
 </div>

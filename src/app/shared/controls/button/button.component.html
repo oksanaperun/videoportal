@@ -1,4 +1,6 @@
-<button class="base-font" [ngStyle]="getStyles()">
+<button
+  class="base-font"
+  [disabled]="disabled">
   <img *ngIf="iconPath" class="icon" src="{{iconPath}}">
   {{name}}
 </button>

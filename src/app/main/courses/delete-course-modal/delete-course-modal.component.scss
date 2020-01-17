@@ -10,10 +10,14 @@
   .cancel-button {
     width: 76px;
     background-color: #d9dbe3;
+
+    ::ng-deep button {
+      color: #a8a9b4;
+    }
   }
 
   .confirm-button {
-    width: 99px;
+    width: 105px;
     background-color: #9bc837;
     margin-left: 18px;
   }

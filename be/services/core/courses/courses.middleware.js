@@ -15,6 +15,7 @@ module.exports = (server) => {
 			filter = query.filter,
 			id = query.id,
 			courses = server.db.getState().courses;
+		let coursesTotalCount;
 
 		if (!!query.textFragment) {
 			courses = courses.filter((course) => course.name.concat(course.description).toUpperCase().indexOf(query.textFragment.toUpperCase()) >= 0);
@@ -37,6 +38,7 @@ module.exports = (server) => {
 		}
 
 		if(!id) {
+			coursesTotalCount = courses.length;
 			courses = courses.slice(from, to);
 		} else {
 			courses = courses.filter((item) => {
@@ -44,7 +46,10 @@ module.exports = (server) => {
 			});
 		}
 
-		res.json(courses);
+		res.json({
+			courses,
+			totalCount: coursesTotalCount
+		});
 	});
 
 	router.get('/error', function(req, res, next) {

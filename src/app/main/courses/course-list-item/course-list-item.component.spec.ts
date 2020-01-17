@@ -105,14 +105,6 @@ describe('CourseListItemComponent', () => {
     it('should have an icon', () => {
       expect(durationEl.iconPath).toBe('assets/img/clock.png');
     });
-
-    it('should have a font size', () => {
-      expect(durationEl.fontSize).toBe('12px');
-    });
-
-    it('should have a color', () => {
-      expect(durationEl.textColor).toBe('#b9bdce');
-    });
   });
 
   describe('creation date', () => {
@@ -128,14 +120,6 @@ describe('CourseListItemComponent', () => {
 
     it('should have an icon', () => {
       expect(creationDateEl.iconPath).toBe('assets/img/calendar.png');
-    });
-
-    it('should have a font size', () => {
-      expect(creationDateEl.fontSize).toBe('12px');
-    });
-
-    it('should have a color', () => {
-      expect(creationDateEl.textColor).toBe('#b9bdce');
     });
   });
 
@@ -153,10 +137,6 @@ describe('CourseListItemComponent', () => {
     it('should have an icon', () => {
       expect(editButtonEl.iconPath).toBe('assets/img/pencil.png');
     });
-
-    it('should have a font size', () => {
-      expect(editButtonEl.fontSize).toBe('12px');
-    });
   });
 
   describe('delete button', () => {
@@ -172,10 +152,6 @@ describe('CourseListItemComponent', () => {
 
     it('should have an icon', () => {
       expect(deleteButtonEl.iconPath).toBe('assets/img/trash.png');
-    });
-
-    it('should have a font size', () => {
-      expect(deleteButtonEl.fontSize).toBe('12px');
     });
   });
 });

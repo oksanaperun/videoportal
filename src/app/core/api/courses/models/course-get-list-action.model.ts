@@ -1,4 +1,4 @@
-export class CourseGetListActionModel {
+export class GetCoursesActionModel {
   constructor(
     public startIndex?: number,
     public count?: number,

@@ -12,13 +12,11 @@ describe('ButtonComponent', () => {
   let hostFixture: ComponentFixture<HostButtonComponent>;
 
   @Component({
-    template: '<app-button [name]="name" [iconPath]="icon" [fontSize]="size" [textColor]="color"></app-button>'
+    template: '<app-button [name]="name" [iconPath]="icon"></app-button>'
   })
   class HostButtonComponent {
     name: string;
     icon: string;
-    size: string;
-    color: string;
   }
 
   beforeEach(async(() => {
@@ -64,23 +62,5 @@ describe('ButtonComponent', () => {
     const iconEl = componentNativeEl.querySelector('img');
 
     expect(iconEl).toBeFalsy();
-  });
-
-  it('should set button font size in styles', () => {
-    const fontSize = 'some_size';
-
-    hostComponent.size = fontSize;
-    hostFixture.detectChanges();
-
-    expect(component.getStyles()).toEqual({ fontSize });
-  });
-
-  it('should set button color in styles', () => {
-    const color = 'some_color';
-
-    hostComponent.color = color;
-    hostFixture.detectChanges();
-
-    expect(component.getStyles()).toEqual({ color });
   });
 });

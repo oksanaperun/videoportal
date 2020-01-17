@@ -28,6 +28,10 @@
     .duration {
       margin-right: 4px;
     }
+
+    app-button ::ng-deep button {
+      color: #b9bdce;
+    }
   }
 
   .description {
@@ -40,11 +44,11 @@
 .actions {
   width: 261px;
 
-  .buttons {
+  .buttons-box {
     display: flex;
     align-items: center;
     height: 100%;
-    margin-left: 88px;
+    margin-left: 75px;
 
     .edit,
     .delete {
@@ -54,12 +58,16 @@
     }
 
     .edit {
-      width: 75px;
+      width: 90px;
       margin-right: 12px;
     }
 
     .delete {
-      width: 86px;
+      width: 100px;
     }
   }
+}
+
+app-button ::ng-deep button {
+  font-size: 12px;
 }

@@ -1,7 +1,6 @@
 <app-input
   class="search-input"
-  [placeholder]="'Text to search'"
-  [iconPath]="'assets/img/search.png'"
-  [inputHeight]="'34px'"
-  (valueChange)="onSearchTextChange($event)"
+  iconPath="assets/img/search.png"
+  [placeholder]="'SEARCH.PLACEHOLDER' | translate"
+  [formControl]="searchText"
 ></app-input>

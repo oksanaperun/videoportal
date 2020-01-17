@@ -1,0 +1,399 @@
+{
+  "HEADER": {
+    "LOGOUT": "Logout"
+  },
+  "FOOTER": {
+    "COPYRIGHT": "© Videocourses. All rights reserved"
+  },
+  "BREADCRUMBS": {
+    "COURSES": "Courses",
+    "NEW_COURSE": "New course"
+  },
+  "SEARCH": {
+    "PLACEHOLDER": "Text to search"
+  },
+  "DURATION": {
+    "HOURS": "h",
+    "MINUTES": "min"
+  },
+  "ERRORS": {
+    "PAGE_NOT_FOUND": "Page not found",
+    "REQUIRED": "This field is required",
+    "MAX_LENGTH": "Max allowed length of this field is {{numberOfSymbols}} symbols",
+    "MIN": "This field value should be greater or equal to {{numberOfSymbols}}"
+  },
+  "LOGIN": {
+    "FORM": {
+      "TITLE": "Login",
+      "ERROR": "User login or password is incorrect",
+      "USER": "E-mail",
+      "USER_PLACEHOLDER": "Enter e-mail",
+      "PASSWORD": "Password",
+      "PASSWORD_PLACEHOLDER": "Enter password",
+      "REQUIRED": "required",
+      "FORGOT": "Forgot password",
+      "SUBMIT": "Login"
+    }
+  },
+  "COURSES": {
+    "ADD": "Add course",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "LOAD_MORE": "Load more",
+    "NO_DATA": {
+      "SEARCH_RESULT": "No courses found",
+      "NON_SEARCH_RESULT": "No data. Feel free to add new course"
+    },
+    "COURSE_FORM": {
+      "NEW_COURSE_TITLE": "New course",
+      "TITLE": "Title",
+      "TITLE_PLACEHOLDER": "Add title",
+      "DESCRIPTION": "Description",
+      "DESCRIPTION_PLACEHOLDER": "Add description",
+      "DURATION": "Duration",
+      "DURATION_PLACEHOLDER": "minutes",
+      "DATE": "Date",
+      "DATE_PLACEHOLDER": "d MMM, yyyy",
+      "AUTHORS": "Authors",
+      "AUTHORS_PLACEHOLDER": "Start typing",
+      "REQUIRED": "required",
+      "CANCEL": "Cancel",
+      "SUBMIT": "Save"
+    },
+    "DELETE_MODAL": {
+      "MESSAGE": "Are you sure you want to delete",
+      "CANCEL": "Cancel",
+      "SUBMIT": "Yes, delete"
+    }
+  },
+  "AUTHORS": {
+    "21": {
+      "name": "Maddox",
+      "lastName": "Diaz"
+    },
+    "57": {
+      "name": "Lola",
+      "lastName": "Glass"
+    },
+    "80": {
+      "name": "Knight",
+      "lastName": "York"
+    },
+    "248": {
+      "name": "Millie",
+      "lastName": "Schneider"
+    },
+    "441": {
+      "name": "Vance",
+      "lastName": "Reynolds"
+    },
+    "612": {
+      "name": "Pam",
+      "lastName": "Vazquez"
+    },
+    "638": {
+      "name": "Weeks",
+      "lastName": "Santos"
+    },
+    "728": {
+      "name": "Rosetta",
+      "lastName": "Barton"
+    },
+    "800": {
+      "name": "Glenda",
+      "lastName": "Juarez"
+    },
+    "978": {
+      "name": "Avila",
+      "lastName": "Bolton"
+    },
+    "1048": {
+      "name": "Casey",
+      "lastName": "Terry"
+    },
+    "1167": {
+      "name": "Garrison",
+      "lastName": "Chambers"
+    },
+    "1370": {
+      "name": "Polly",
+      "lastName": "Sosa"
+    },
+    "1416": {
+      "name": "Ashlee",
+      "lastName": "Hines"
+    },
+    "1772": {
+      "name": "Hilda",
+      "lastName": "Gaines"
+    },
+    "1861": {
+      "name": "Michael",
+      "lastName": "Stout"
+    },
+    "1939": {
+      "name": "Hilary",
+      "lastName": "Mcdowell"
+    },
+    "1980": {
+      "name": "Leona",
+      "lastName": "Bailey"
+    },
+    "2005": {
+      "name": "Dotson",
+      "lastName": "Hernandez"
+    },
+    "2017": {
+      "name": "Orr",
+      "lastName": "Conrad"
+    },
+    "2138": {
+      "name": "Torres",
+      "lastName": "Farley"
+    },
+    "2148": {
+      "name": "Joyce",
+      "lastName": "Sparks"
+    },
+    "2252": {
+      "name": "Reba",
+      "lastName": "Perez"
+    },
+    "2309": {
+      "name": "Williamson",
+      "lastName": "Phillips"
+    },
+    "2700": {
+      "name": "Wynn",
+      "lastName": "Knowles"
+    },
+    "3003": {
+      "name": "Abbott",
+      "lastName": "Mckay"
+    },
+    "3060": {
+      "name": "Landry",
+      "lastName": "Valdez"
+    },
+    "3121": {
+      "name": "Twila",
+      "lastName": "Jennings"
+    },
+    "3343": {
+      "name": "Margie",
+      "lastName": "Cote"
+    },
+    "3399": {
+      "name": "Schmidt",
+      "lastName": "Cooke"
+    },
+    "3455": {
+      "name": "Leah",
+      "lastName": "Sweet"
+    },
+    "3477": {
+      "name": "Daugherty",
+      "lastName": "Guy"
+    },
+    "3509": {
+      "name": "Jessie",
+      "lastName": "Kelly"
+    },
+    "3517": {
+      "name": "Burke",
+      "lastName": "Eaton"
+    },
+    "3618": {
+      "name": "Laura",
+      "lastName": "Kirby"
+    },
+    "3733": {
+      "name": "Patti",
+      "lastName": "Sampson"
+    },
+    "3907": {
+      "name": "Macdonald",
+      "lastName": "Ward"
+    },
+    "4165": {
+      "name": "Gilda",
+      "lastName": "Huff"
+    },
+    "4290": {
+      "name": "Latonya",
+      "lastName": "Hester"
+    },
+    "4388": {
+      "name": "Oneil",
+      "lastName": "Carlson"
+    },
+    "4441": {
+      "name": "Willa",
+      "lastName": "Cortez"
+    },
+    "4831": {
+      "name": "Noreen",
+      "lastName": "Sullivan"
+    },
+    "4998": {
+      "name": "Doyle",
+      "lastName": "Webster"
+    },
+    "5186": {
+      "name": "Russell",
+      "lastName": "Butler"
+    },
+    "5187": {
+      "name": "Etta",
+      "lastName": "Key"
+    },
+    "5341": {
+      "name": "Nettie",
+      "lastName": "Sanford"
+    },
+    "5365": {
+      "name": "Edwards",
+      "lastName": "Nunez"
+    },
+    "5508": {
+      "name": "Patsy",
+      "lastName": "Bright"
+    },
+    "5524": {
+      "name": "Cobb",
+      "lastName": "Hudson"
+    },
+    "5583": {
+      "name": "Katharine",
+      "lastName": "Hopkins"
+    },
+    "5653": {
+      "name": "Leblanc",
+      "lastName": "Bradley"
+    },
+    "5892": {
+      "name": "Hope",
+      "lastName": "Boyer"
+    },
+    "5907": {
+      "name": "Jacobson",
+      "lastName": "Riddle"
+    },
+    "6039": {
+      "name": "Mcgowan",
+      "lastName": "Nelson"
+    },
+    "6050": {
+      "name": "Norman",
+      "lastName": "Love"
+    },
+    "6185": {
+      "name": "Yvette",
+      "lastName": "Foster"
+    },
+    "6440": {
+      "name": "Andrews",
+      "lastName": "Byers"
+    },
+    "6880": {
+      "name": "Irma",
+      "lastName": "Martinez"
+    },
+    "7134": {
+      "name": "Kim",
+      "lastName": "Brewer"
+    },
+    "7333": {
+      "name": "Michele",
+      "lastName": "Cunningham"
+    },
+    "7407": {
+      "name": "Price",
+      "lastName": "Britt"
+    },
+    "7458": {
+      "name": "Deana",
+      "lastName": "Bruce"
+    },
+    "7614": {
+      "name": "Moody",
+      "lastName": "Cash"
+    },
+    "7653": {
+      "name": "Miranda",
+      "lastName": "Christian"
+    },
+    "7827": {
+      "name": "Lorna",
+      "lastName": "Joyce"
+    },
+    "7987": {
+      "name": "Anthony",
+      "lastName": "Mcguire"
+    },
+    "8235": {
+      "name": "Parks",
+      "lastName": "Mack"
+    },
+    "8318": {
+      "name": "Rowland",
+      "lastName": "Vasquez"
+    },
+    "8335": {
+      "name": "Ronda",
+      "lastName": "Dean"
+    },
+    "8339": {
+      "name": "Claire",
+      "lastName": "Battle"
+    },
+    "8413": {
+      "name": "Greta",
+      "lastName": "Richardson"
+    },
+    "8509": {
+      "name": "Shawn",
+      "lastName": "Craig"
+    },
+    "8635": {
+      "name": "Juliana",
+      "lastName": "Holden"
+    },
+    "8781": {
+      "name": "Carson",
+      "lastName": "Suarez"
+    },
+    "9064": {
+      "name": "Quinn",
+      "lastName": "Cain"
+    },
+    "9101": {
+      "name": "Singleton",
+      "lastName": "Ellison"
+    },
+    "9190": {
+      "name": "Gregory",
+      "lastName": "Ratliff"
+    },
+    "9215": {
+      "name": "Ofelia",
+      "lastName": "Rodgers"
+    },
+    "9364": {
+      "name": "Berger",
+      "lastName": "Powell"
+    },
+    "9562": {
+      "name": "Dejesus",
+      "lastName": "Snow"
+    },
+    "9926": {
+      "name": "Burt",
+      "lastName": "Holland"
+    },
+    "9950": {
+      "name": "Roy",
+      "lastName": "George"
+    }
+  }
+}
