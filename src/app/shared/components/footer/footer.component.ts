@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
-export class FooterComponent {
-  copyrightText = 'Copyright © Videocourses. All rights reserved';
-}
+export class FooterComponent {}

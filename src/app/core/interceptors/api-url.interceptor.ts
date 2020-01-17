@@ -10,9 +10,11 @@ export class ApiUrlInterceptor implements HttpInterceptor {
   constructor() { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    request = request.clone({
-      url: `${environment.apiUrl}/${request.url}`
-    });
+    if (!request.url.startsWith('./assets/')) {
+      request = request.clone({
+        url: `${environment.apiUrl}/${request.url}`
+      });
+    }
 
     return next.handle(request);
   }

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { tap, map, catchError } from 'rxjs/operators';
+import { Observable, of, combineLatest } from 'rxjs';
+import { tap, map, catchError, switchMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 
 import { AppState } from 'src/app/core/store/models/app-state';
 import { CourseService } from 'src/app/core/api/courses/course.service';
@@ -42,6 +43,7 @@ export class CourseComponent implements OnInit {
     private store: Store<AppState>,
     private authorService: AuthorService,
     private formBuilder: FormBuilder,
+    private translateService: TranslateService,
   ) { }
 
   ngOnInit() {
@@ -75,19 +77,36 @@ export class CourseComponent implements OnInit {
 
   private getAuthors() {
     this.authorOptions$ = this.authorService.get().pipe(
+      switchMap((authors: AuthorDto[]) => this.getTranslatedAuthors$(authors)),
       tap((authors: AuthorDto[]) => { this.authorsSourceData = authors; }),
       map((authors: AuthorDto[]) => this.mapAuthorsToSelectOptions(authors)),
       map((options: SelectOption[]) => options.sort(sortAuthorOptions)),
     );
   }
 
-  private setDataOnNewCourse() {
-    this.formTitle = 'New course';
+  private getTranslatedAuthors$(authors: AuthorDto[]): Observable<AuthorDto[]> {
+    return combineLatest(
+      authors.map(author =>
+        this.translateService.get(`AUTHORS.${author.id}`).pipe(
+          map(res => ({
+            id: author.id,
+            ...res
+          })))
+      )
+    );
+  }
 
-    this.store.dispatch(new SetChildRoute({
-      path: ['courses', 'new'],
-      title: 'New course'
-    }));
+  private setDataOnNewCourse() {
+    this.translateService.get('COURSES.COURSE_FORM.NEW_COURSE_TITLE').subscribe(result => {
+      this.formTitle = result;
+    });
+
+    this.translateService.get('BREADCRUMBS.NEW_COURSE').subscribe(result => {
+      this.store.dispatch(new SetChildRoute({
+        path: ['courses', 'new'],
+        title: result
+      }));
+    });
   }
 
   private setDataOnExistingCourse(course: Course) {
@@ -103,7 +122,9 @@ export class CourseComponent implements OnInit {
   private getCourseData(id: string) {
     this.coursesService.get(id).pipe(
       tap((course: Course) => { this.setDataOnExistingCourse(course); }),
-      catchError(() => {
+      switchMap((course: Course) => this.getTranslatedAuthors$(course.authors)),
+      tap((authors: Author[]) => { this.setTranslatedAuthors(authors); }),
+      catchError((e) => {
         this.router.navigate(['404']);
         return of();
       }),
@@ -119,8 +140,12 @@ export class CourseComponent implements OnInit {
       description: course.description,
       duration: course.duration,
       date: course.creationDate,
-      authors: this.mapAuthorsToSelectOptions(course.authors)
+      authors: [],
     });
+  }
+
+  private setTranslatedAuthors(authors: Author[]) {
+    this.courseForm.controls.authors.setValue(this.mapAuthorsToSelectOptions(authors));
   }
 
   private mapAuthorsToSelectOptions(authors: Author[]): SelectOption[] {

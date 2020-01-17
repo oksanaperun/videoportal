@@ -3,6 +3,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 
+import { LanguageService } from 'src/app/core/services/language.service';
+
 export const DATE_FORMATS = {
   parse: {
     dateInput: 'D MMM, YYYY',
@@ -39,6 +41,13 @@ export class DatepickerComponent implements ControlValueAccessor {
 
   value: Date;
 
+  constructor(
+    private dateAdapter: DateAdapter<Date>,
+    private languageService: LanguageService,
+  ) {
+    this.setLocale();
+  }
+
   onInput(event) {
     this.propagateChange(event.value ? event.value.valueOf() : null);
   }
@@ -56,4 +65,10 @@ export class DatepickerComponent implements ControlValueAccessor {
   registerOnTouched() { }
 
   private propagateChange = (_: Date) => { };
+
+  private setLocale() {
+    const language = this.languageService.getLanguage();
+
+    this.dateAdapter.setLocale(language);
+  }
 }

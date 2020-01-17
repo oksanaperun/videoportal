@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, tap, delay } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 
 import { AppState } from 'src/app/core/store/models/app-state';
 import { Course } from 'src/app/core/entities';
@@ -22,11 +23,12 @@ import { SetMainRoute } from 'src/app/core/store/breadcrumbs-store';
 export class CoursesComponent implements AfterViewInit {
   courses$: Observable<Course[]>;
   showLoadMore = true;
-  noDataMessage: string;
+  noDataMessageKey: string;
 
   constructor(
     private router: Router,
     private store: Store<AppState>,
+    private translateService: TranslateService,
   ) { }
 
   ngAfterViewInit() {
@@ -48,10 +50,12 @@ export class CoursesComponent implements AfterViewInit {
   }
 
   private setBreadcrumbs() {
-    this.store.dispatch(new SetMainRoute({
-      path: ['courses'],
-      title: 'Courses'
-    }));
+    this.translateService.get('BREADCRUMBS.COURSES').subscribe(result => {
+      this.store.dispatch(new SetMainRoute({
+        path: ['courses'],
+        title: result
+      }));
+    });
   }
 
   private setCourses() {
@@ -68,8 +72,8 @@ export class CoursesComponent implements AfterViewInit {
   }
 
   private setNoDataMessage(courses: Course[], searchText: string) {
-    this.noDataMessage = !courses.length
-      ? (searchText ? 'no courses found' : 'no data. feel free to add new course')
+    this.noDataMessageKey = !courses.length
+      ? (searchText ? 'COURSES.NO_DATA.SEARCH_RESULT' : 'COURSES.NO_DATA.NON_SEARCH_RESULT')
       : '';
   }
 

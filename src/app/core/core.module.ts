@@ -1,13 +1,16 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { registerLocaleData } from '@angular/common';
+import localeUk from '@angular/common/locales/uk';
 
 import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './services/auth.service';
+import { LanguageService } from './services/language.service';
 import { UserService } from './api/user/user.service';
 
 import { AuthHeaderInterceptor } from './interceptors/auth-header.interceptor';
@@ -19,6 +22,14 @@ import { breadcrumbsReducers } from './store/breadcrumbs-store';
 import { loaderReducers } from './store/loader-store';
 
 import { environment } from 'src/environments/environment';
+
+import { TranslationLoader } from './translation/translation-loader';
+
+export function TranslationLoaderFactory(http: HttpClient) {
+    return new TranslationLoader(http);
+}
+
+registerLocaleData(localeUk, 'uk');
 
 @NgModule({
     declarations: [],
@@ -35,10 +46,18 @@ import { environment } from 'src/environments/environment';
             maxAge: 25,
             logOnly: environment.production,
         }),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: TranslationLoaderFactory,
+                deps: [HttpClient]
+            }
+        }),
     ],
     providers: [
         AuthGuard,
         AuthService,
+        LanguageService,
         UserService,
         {
             provide: HTTP_INTERCEPTORS,
@@ -54,7 +73,12 @@ import { environment } from 'src/environments/environment';
             provide: HTTP_INTERCEPTORS,
             useClass: LoaderInterceptor,
             multi: true
-        }
+        },
+        {
+            provide: LOCALE_ID,
+            deps: [LanguageService],
+            useFactory: (languageService) => languageService.getLanguage()
+          }
     ],
     exports: []
 })

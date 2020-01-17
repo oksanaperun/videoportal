@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-form-control-error',
@@ -12,20 +14,24 @@ export class FormControlErrorComponent {
   @Input() errorName: string;
   @Input() errorCondition?: any;
 
+  constructor(
+    private translateService: TranslateService,
+  ) {}
+
   hasError(): boolean {
     const control = this.form.controls[this.controlName];
 
     return control.dirty && control.errors && control.errors[this.errorName];
   }
 
-  getErrorMessage(): string {
+  getErrorMessage$(): Observable<string> {
     switch (this.errorName) {
       case 'required':
-        return 'This field is required';
+        return this.translateService.get('ERRORS.REQUIRED');
       case 'maxlength':
-        return `Max allowed length of this field is ${this.errorCondition} symbols`;
+        return this.translateService.get('ERRORS.MAX_LENGTH', { numberOfSymbols: this.errorCondition });
       case 'min':
-        return `This field value should be greater or equal to ${this.errorCondition}`;
+        return this.translateService.get('ERRORS.MIN', { numberOfSymbols: this.errorCondition });
     }
   }
 }

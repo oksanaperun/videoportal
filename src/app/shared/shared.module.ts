@@ -6,6 +6,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectModule } from '@angular/material/select';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -58,6 +60,8 @@ const items = [
         MatNativeDateModule,
         MatProgressSpinnerModule,
         MatAutocompleteModule,
+        MatSelectModule,
+        TranslateModule,
         FormsModule,
         ReactiveFormsModule,
     ],
@@ -69,6 +73,9 @@ const items = [
             }
         }
     ],
-    exports: [...items],
+    exports: [
+        ...items,
+        TranslateModule,
+    ],
 })
 export class SharedModule { }

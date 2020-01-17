@@ -1,24 +1,24 @@
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
   <div class="header-box">
-    <span class="base-font title">Login</span>
+    <span class="base-font title">{{ 'LOGIN.FORM.TITLE' | translate }}</span>
 
     <span
-      *ngIf="errorMessage$ | async as errorMessage"
+      *ngIf="errorMessage$ | async"
       class="base-font error-message">
-      {{errorMessage}}
+      {{ 'LOGIN.FORM.ERROR' | translate }}
     </span>
   </div>
 
   <div class="user-login-box">
     <div class="header">
-      <span class="base-font name">E-mail:</span>
-      <span class="base-font required">*required</span>
+      <span class="base-font name">{{ 'LOGIN.FORM.USER' | translate }}:</span>
+      <span class="base-font required">*{{ 'LOGIN.FORM.REQUIRED' | translate }}</span>
     </div>
 
     <app-input
       formControlName="userLogin"
-      placeholder="Enter e-mail"
+      [placeholder]="'LOGIN.FORM.USER_PLACEHOLDER' | translate"
       [invalid]="!isControlValid('userLogin')"
     ></app-input>
 
@@ -31,14 +31,14 @@
 
   <div class="user-password-box">
     <div class="header">
-      <span class="base-font name">Password:</span>
-      <span class="base-font required">*required</span>
+      <span class="base-font name">{{ 'LOGIN.FORM.PASSWORD' | translate }}:</span>
+      <span class="base-font required">*{{ 'LOGIN.FORM.REQUIRED' | translate }}</span>
     </div>
 
     <app-input
       formControlName="password"
-      placeholder="Enter password"
       type="password"
+      [placeholder]="'LOGIN.FORM.PASSWORD_PLACEHOLDER' | translate"
       [invalid]="!isControlValid('password')"
     ></app-input>
 
@@ -50,12 +50,12 @@
   </div>
 
   <div class="footer-box">
-    <span class="base-font forgot-password">Forgot password?</span>
+    <span class="base-font forgot-password">{{ 'LOGIN.FORM.FORGOT' | translate }}?</span>
 
     <app-button
       type="submit"
       class="login-button"
-      name="Login"
+      [name]="'LOGIN.FORM.SUBMIT' | translate"
       [class.disabled]="!loginForm.valid"
       [disabled]="!loginForm.valid"
     ></app-button>

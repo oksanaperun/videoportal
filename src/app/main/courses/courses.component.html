@@ -4,14 +4,14 @@
 
 <div class="add-button-box">
   <app-button
-    name="Add course"
     iconPath="assets/img/plus.png"
+    [name]="'COURSES.ADD' | translate"
     (click)="onAddButtonClick()"
   ></app-button>
 </div>
 
-<div *ngIf="noDataMessage" class="base-font no-data-message">
-  {{noDataMessage | uppercase}}
+<div *ngIf="noDataMessageKey" class="base-font no-data-message">
+  {{ noDataMessageKey | translate | uppercase }}
 </div>
 
 <ng-container *ngIf="courses$ | async as courses">
@@ -21,6 +21,6 @@
   ></app-course-list>
 
   <div class="load-more-box" *ngIf="showLoadMore">
-    <span (click)="onLoadMoreClick()">{{'load more' | uppercase}}</span>
+    <span (click)="onLoadMoreClick()">{{ 'COURSES.LOAD_MORE' | translate | uppercase }}</span>
   </div>
 </ng-container>

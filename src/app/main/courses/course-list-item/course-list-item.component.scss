@@ -48,7 +48,7 @@
     display: flex;
     align-items: center;
     height: 100%;
-    margin-left: 88px;
+    margin-left: 75px;
 
     .edit,
     .delete {
@@ -58,12 +58,12 @@
     }
 
     .edit {
-      width: 75px;
+      width: 90px;
       margin-right: 12px;
     }
 
     .delete {
-      width: 86px;
+      width: 100px;
     }
   }
 }

@@ -13,7 +13,7 @@
       <app-button
         class="duration"
         iconPath="assets/img/clock.png"
-        [name]="course?.duration | timeInMinutes"
+        [name]="course?.duration | timeInMinutes | async"
       ></app-button>
 
       <app-button
@@ -29,15 +29,15 @@
     <div class="buttons-box">
       <app-button
         class="edit"
-        name="Edit"
         iconPath="assets/img/pencil.png"
+        [name]="'COURSES.EDIT' | translate"
         (click)="onEditButtonClick()"
       ></app-button>
 
       <app-button
         class="delete"
-        name="Delete"
         iconPath="assets/img/trash.png"
+        [name]="'COURSES.DELETE' | translate"
         (click)="onDeleteButtonClick()"
       ></app-button>
     </div>
